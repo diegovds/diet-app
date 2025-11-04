@@ -56,5 +56,3 @@ export async function routes(app: FastifyInstance) {
     },
   )
 }
-
-// parei em 56:00
