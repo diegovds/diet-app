@@ -17,30 +17,18 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select'
+import { DietData, DietDataSchema } from '@/types/diet-data'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Utensils } from 'lucide-react'
 import { useForm } from 'react-hook-form'
-import z from 'zod'
-
-const dietSchema = z.object({
-  name: z.string().min(2),
-  weight: z.number().positive(),
-  height: z.number().positive(),
-  age: z.number().positive().int(),
-  activity_level: z.enum(['sedentario', '2x_semana', '4x_semana']),
-  genre: z.enum(['masculino', 'feminino', 'outro']),
-  goal: z.enum(['perda_de_peso', 'hipertrofia', 'manter_massa_muscular']),
-})
-
-type DietForm = z.infer<typeof dietSchema>
 
 interface DietFormProps {
-  onSubmit: (data: DietForm) => void
+  onSubmit: (data: DietData) => void
 }
 
 export function DietForm({ onSubmit }: DietFormProps) {
-  const form = useForm<DietForm>({
-    resolver: zodResolver(dietSchema),
+  const form = useForm<DietData>({
+    resolver: zodResolver(DietDataSchema),
     defaultValues: {
       name: '',
       weight: undefined,
