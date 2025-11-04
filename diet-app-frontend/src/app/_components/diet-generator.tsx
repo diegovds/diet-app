@@ -73,8 +73,8 @@ export function DietGenerator({ data }: { data: DietData }) {
   }
 
   return (
-    <div className="flex min-h-screen flex-col items-center justify-center p-4">
-      <Card className="w-full max-w-4xl border-0 p-4 md:p-6">
+    <div className="flex min-h-screen flex-col items-center justify-center px-5 py-10">
+      <Card className="w-full max-w-4xl border-0 p-5">
         <div className="flex justify-center gap-4">
           <Button
             className="cursor-pointer gap-2"
