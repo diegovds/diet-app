@@ -18,13 +18,9 @@ import {
     FormMessage,
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
-import {
-    AuthFormData,
-    signInSchema,
-    signUpSchema
-} from '@/types/auth'
+import { AuthFormData, signInSchema, signUpSchema } from '@/types/auth'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 
 export function AuthForm() {
@@ -42,6 +38,10 @@ export function AuthForm() {
   const onSubmit = async (data: AuthFormData) => {
     console.log(isSignin ? 'Sign in' : 'Sign up', data)
   }
+
+  useEffect(() => {
+    form.reset()
+  }, [isSignin, form])
 
   return (
     <Card className="w-full flex-1 gap-6 p-5">
