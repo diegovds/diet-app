@@ -19,7 +19,13 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="pt-BR">
-      <body className={`${nunitoSans.variable} antialiased`}>{children}</body>
+      <body className={`${nunitoSans.variable} antialiased`}>
+        <div className="flex min-h-dvh flex-col">
+          <main className="mx-auto flex w-full max-w-7xl flex-1 items-center justify-center px-5 py-12">
+            {children}
+          </main>
+        </div>
+      </body>
     </html>
   )
 }
