@@ -1,24 +1,13 @@
-'use client'
-
-import { DietData } from '@/types/diet-data'
-import { useState } from 'react'
-import { DietForm } from './_components/diet-form'
-import { DietGenerator } from './_components/diet-generator'
+import { AuthForm } from './_components/auth-form'
 
 export default function Home() {
-  const [data, setData] = useState<DietData | null>(null)
-
-  function handleSubmit(userInfo: DietData) {
-    setData(userInfo)
-  }
-
   return (
-    <>
-      {!data ? (
-        <DietForm onSubmit={handleSubmit} />
-      ) : (
-        <DietGenerator data={data} />
-      )}
-    </>
+    <div className="flex w-full flex-col items-center justify-center gap-5 md:flex-row">
+      <div className="flex w-full flex-2 flex-col items-center">
+        <h1>Título</h1>
+        <div>Descrição</div>
+      </div>
+      <AuthForm />
+    </div>
   )
 }
