@@ -1,3 +1,4 @@
+import { QueryClientContext } from '@/providers/query-client'
 import type { Metadata } from 'next'
 import { Nunito_Sans } from 'next/font/google'
 import './globals.css'
@@ -20,11 +21,13 @@ export default function RootLayout({
   return (
     <html lang="pt-BR">
       <body className={`${nunitoSans.variable} antialiased`}>
-        <div className="flex min-h-dvh flex-col">
-          <main className="mx-auto flex w-full max-w-7xl flex-1 items-center justify-center px-5 py-12">
-            {children}
-          </main>
-        </div>
+        <QueryClientContext>
+          <div className="flex min-h-dvh flex-col">
+            <main className="mx-auto flex w-full max-w-7xl flex-1 items-center justify-center px-5 py-12">
+              {children}
+            </main>
+          </div>
+        </QueryClientContext>
       </body>
     </html>
   )
