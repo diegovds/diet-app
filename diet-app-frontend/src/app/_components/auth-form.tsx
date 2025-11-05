@@ -2,30 +2,30 @@
 
 import { Button } from '@/components/ui/button'
 import {
-    Card,
-    CardContent,
-    CardDescription,
-    CardFooter,
-    CardHeader,
-    CardTitle,
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
 } from '@/components/ui/card'
 import {
-    Form,
-    FormControl,
-    FormField,
-    FormItem,
-    FormLabel,
-    FormMessage,
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
+import { useAuthMutation } from '@/hooks/use-auth-mutation'
 import { AuthFormData, signInSchema, signUpSchema } from '@/types/auth'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 
 export function AuthForm() {
-  const [isSignin, setIsSignin] = useState<boolean>(true)
-
+  const [isSignin, setIsSignin] = useState(true)
   const form = useForm<AuthFormData>({
     resolver: zodResolver(isSignin ? signInSchema : signUpSchema),
     defaultValues: {
@@ -35,8 +35,10 @@ export function AuthForm() {
     },
   })
 
-  const onSubmit = async (data: AuthFormData) => {
-    console.log(isSignin ? 'Sign in' : 'Sign up', data)
+  const { mutate, isPending, isError, error, data } = useAuthMutation()
+
+  const onSubmit = (data: AuthFormData) => {
+    mutate(data)
   }
 
   useEffect(() => {
@@ -44,7 +46,7 @@ export function AuthForm() {
   }, [isSignin, form])
 
   return (
-    <Card className="w-full flex-1 gap-6 p-5">
+    <Card className="w-full flex-1 gap-6 border-0 p-5">
       <CardHeader className="p-0">
         <CardTitle>
           {isSignin ? 'Faça login na sua conta' : 'Crie sua conta'}
@@ -69,17 +71,14 @@ export function AuthForm() {
                   <FormItem className="grid gap-2">
                     <FormLabel>Nome</FormLabel>
                     <FormControl>
-                      <Input
-                        placeholder="Digite seu nome"
-                        type="text"
-                        {...field}
-                      />
+                      <Input placeholder="Digite seu nome" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
                 )}
               />
             )}
+
             <FormField
               control={form.control}
               name="email"
@@ -87,16 +86,13 @@ export function AuthForm() {
                 <FormItem className="grid gap-2">
                   <FormLabel>E-mail</FormLabel>
                   <FormControl>
-                    <Input
-                      placeholder="Digite seu e-mail"
-                      type="text"
-                      {...field}
-                    />
+                    <Input placeholder="Digite seu e-mail" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
             />
+
             <FormField
               control={form.control}
               name="password"
@@ -114,6 +110,7 @@ export function AuthForm() {
                 </FormItem>
               )}
             />
+
             {!isSignin && (
               <FormField
                 control={form.control}
@@ -123,7 +120,7 @@ export function AuthForm() {
                     <FormLabel>Confirme a senha</FormLabel>
                     <FormControl>
                       <Input
-                        placeholder="Digite a confirmação de senha"
+                        placeholder="Confirme sua senha"
                         type="password"
                         {...field}
                       />
@@ -133,12 +130,22 @@ export function AuthForm() {
                 )}
               />
             )}
-            <Button type="submit" className="w-full">
-              {isSignin ? 'Entrar' : 'Cadastrar'}
+
+            <Button type="submit" className="w-full" disabled={isPending}>
+              {isPending ? 'Enviando...' : isSignin ? 'Entrar' : 'Cadastrar'}
             </Button>
           </form>
         </Form>
+
+        {isError && (
+          <p className="mt-2 text-sm text-red-500">
+            {error instanceof Error
+              ? error.message
+              : 'Erro ao autenticar. Tente novamente.'}
+          </p>
+        )}
       </CardContent>
+
       <CardFooter className="justify-center p-0">
         <Button variant="link" onClick={() => setIsSignin(!isSignin)}>
           {isSignin ? 'Criar conta' : 'Já possui uma conta?'}
