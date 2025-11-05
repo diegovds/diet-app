@@ -82,7 +82,7 @@ export const auth: FastifyPluginAsyncZod = async (app) => {
           },
         )
 
-        return { token }
+        return reply.status(200).send({ token })
       }
 
       if (!user) {
