@@ -1,7 +1,9 @@
 import fastifyCors from '@fastify/cors'
+import fastifyJwt from '@fastify/jwt'
 import fastifySwagger from '@fastify/swagger'
 import fastifySwaggerUi from '@fastify/swagger-ui'
 import fastify from 'fastify'
+import fastifyBcrypt from 'fastify-bcrypt'
 import {
   jsonSchemaTransform,
   serializerCompiler,
@@ -18,6 +20,14 @@ app.setValidatorCompiler(validatorCompiler)
 
 app.register(fastifyCors, {
   origin: true,
+})
+
+app.register(fastifyBcrypt, {
+  saltWorkFactor: 10,
+})
+
+app.register(fastifyJwt, {
+  secret: env.JWT_SECRET_KEY,
 })
 
 app.register(fastifySwagger, {
