@@ -11,6 +11,10 @@ export default defineConfig({
       baseUrl: 'http://localhost:3333',
 
       override: {
+        mutator: {
+          path: './fetchMutator.ts',
+          name: 'customFetch',
+        },
         fetch: {
           includeHttpResponseReturnType: false,
         },

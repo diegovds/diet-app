@@ -5,6 +5,7 @@
  * API para o Diet App
  * OpenAPI spec version: 0.0.1
  */
+import { customFetch } from '../../fetchMutator'
 export type PostPlanBodyActivityLevel =
   (typeof PostPlanBodyActivityLevel)[keyof typeof PostPlanBodyActivityLevel]
 
@@ -90,15 +91,10 @@ export const getGetUrl = () => {
 }
 
 export const get = async (options?: RequestInit): Promise<void> => {
-  const res = await fetch(getGetUrl(), {
+  return customFetch<void>(getGetUrl(), {
     ...options,
     method: 'GET',
   })
-
-  const body = [204, 205, 304].includes(res.status) ? null : await res.text()
-
-  const data: void = body ? JSON.parse(body) : {}
-  return data
 }
 
 /**
@@ -113,17 +109,12 @@ export const postPlan = async (
   postPlanBody: PostPlanBody,
   options?: RequestInit,
 ): Promise<string> => {
-  const res = await fetch(getPostPlanUrl(), {
+  return customFetch<string>(getPostPlanUrl(), {
     ...options,
     method: 'POST',
     headers: { 'Content-Type': 'application/json', ...options?.headers },
     body: JSON.stringify(postPlanBody),
   })
-
-  const body = [204, 205, 304].includes(res.status) ? null : await res.text()
-
-  const data: string = body ? JSON.parse(body) : {}
-  return data
 }
 
 /**
@@ -138,15 +129,10 @@ export const postAuth = async (
   postAuthBody: PostAuthBody,
   options?: RequestInit,
 ): Promise<PostAuth200> => {
-  const res = await fetch(getPostAuthUrl(), {
+  return customFetch<PostAuth200>(getPostAuthUrl(), {
     ...options,
     method: 'POST',
     headers: { 'Content-Type': 'application/json', ...options?.headers },
     body: JSON.stringify(postAuthBody),
   })
-
-  const body = [204, 205, 304].includes(res.status) ? null : await res.text()
-
-  const data: PostAuth200 = body ? JSON.parse(body) : {}
-  return data
 }
