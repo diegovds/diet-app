@@ -60,6 +60,31 @@ export type PostPlan400 = {
   details: unknown
 }
 
+export type PostAuthBody = {
+  /** @minLength 2 */
+  name?: string
+  /** @pattern ^(?!\.)(?!.*\.\.)([A-Za-z0-9_'+\-\.]*)[A-Za-z0-9_+-]@([A-Za-z0-9][A-Za-z0-9\-]*\.)+[A-Za-z]{2,}$ */
+  email: string
+  /** @minLength 6 */
+  password: string
+}
+
+export type PostAuth200 = {
+  token: string
+}
+
+export type PostAuth400 = {
+  message: string
+}
+
+export type PostAuth401 = {
+  message: string
+}
+
+export type PostAuth404 = {
+  message: string
+}
+
 export const getGetUrl = () => {
   return `http://localhost:3333/`
 }
@@ -98,5 +123,30 @@ export const postPlan = async (
   const body = [204, 205, 304].includes(res.status) ? null : await res.text()
 
   const data: string = body ? JSON.parse(body) : {}
+  return data
+}
+
+/**
+ * Se o usuário não existir, uma nova conta será criada. Se o usuário já existir, ele será autenticado.
+ * @summary Cria uma nova conta ou autentica um usuário existente
+ */
+export const getPostAuthUrl = () => {
+  return `http://localhost:3333/auth`
+}
+
+export const postAuth = async (
+  postAuthBody: PostAuthBody,
+  options?: RequestInit,
+): Promise<PostAuth200> => {
+  const res = await fetch(getPostAuthUrl(), {
+    ...options,
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', ...options?.headers },
+    body: JSON.stringify(postAuthBody),
+  })
+
+  const body = [204, 205, 304].includes(res.status) ? null : await res.text()
+
+  const data: PostAuth200 = body ? JSON.parse(body) : {}
   return data
 }
