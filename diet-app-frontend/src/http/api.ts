@@ -196,7 +196,7 @@ export type GetUser200 = {
   /** @nullable */
   age?: number | null
   /** @nullable */
-  activity_level?: GetUser200ActivityLevel
+  activityLevel?: GetUser200ActivityLevel
   /** @nullable */
   genre?: GetUser200Genre
   /** @nullable */
