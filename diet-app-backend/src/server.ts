@@ -13,6 +13,15 @@ import {
 import { env } from './env'
 import { routes } from './routes/main'
 
+declare module 'fastify' {
+  interface FastifyInstance {
+    authenticate: (
+      request: FastifyRequest,
+      reply: FastifyReply,
+    ) => Promise<void>
+  }
+}
+
 const app = fastify().withTypeProvider<ZodTypeProvider>()
 
 app.setSerializerCompiler(serializerCompiler)
@@ -30,6 +39,14 @@ app.register(fastifyJwt, {
   secret: env.JWT_SECRET_KEY,
 })
 
+app.decorate('authenticate', async function (request, reply): Promise<void> {
+  try {
+    await request.jwtVerify()
+  } catch {
+    reply.status(401).send({ message: 'Não autorizado' })
+  }
+})
+
 app.register(fastifySwagger, {
   openapi: {
     info: {
@@ -37,6 +54,20 @@ app.register(fastifySwagger, {
       version: '0.0.1',
       description: 'API para o Diet App',
     },
+    components: {
+      securitySchemes: {
+        bearerAuth: {
+          type: 'http',
+          scheme: 'bearer',
+          bearerFormat: 'JWT',
+        },
+      },
+    },
+    security: [
+      {
+        bearerAuth: [],
+      },
+    ],
   },
   transform: jsonSchemaTransform,
 })

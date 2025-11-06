@@ -1,13 +1,14 @@
 import { FastifyPluginAsyncZod } from 'fastify-type-provider-zod'
 import { z } from 'zod'
-import { findUser, insertUser } from '../services/users'
+import { findUserByEmail, insertUser, updateUserById } from '../services/users'
 
 export const auth: FastifyPluginAsyncZod = async (app) => {
   app.post(
     '/auth',
     {
       schema: {
-        tags: ['Auth'],
+        tags: ['User'],
+        security: [],
         summary: 'Cria uma nova conta ou autentica um usuário existente',
         description:
           'Se o usuário não existir, uma nova conta será criada. Se o usuário já existir, ele será autenticado.',
@@ -43,7 +44,7 @@ export const auth: FastifyPluginAsyncZod = async (app) => {
       let passwordVerify = false
       let passwordHash = ''
 
-      let user = await findUser(email)
+      let user = await findUserByEmail(email)
 
       if (user && name) {
         return reply.status(400).send({
@@ -92,6 +93,62 @@ export const auth: FastifyPluginAsyncZod = async (app) => {
       }
 
       return reply.status(400).send({ message: 'Ocorreu um erro no servidor.' })
+    },
+  )
+}
+
+export const updateUser: FastifyPluginAsyncZod = async (app) => {
+  app.patch(
+    '/user',
+    {
+      preHandler: [app.authenticate],
+      schema: {
+        tags: ['User'],
+        security: [{ bearerAuth: [] }],
+        summary: 'Atualiza os dados do usuário autenticado',
+        description:
+          'Permite ao usuário autenticado atualizar seus próprios dados. Todos os campos são opcionais.',
+        body: z.object({
+          name: z.string().min(2).optional(),
+          weight: z.number().positive().optional(),
+          height: z.number().positive().optional(),
+          age: z.number().int().positive().optional(),
+          activityLevel: z
+            .enum(['sedentario', '2x_semana', '4x_semana'])
+            .optional(),
+          genre: z.enum(['masculino', 'feminino', 'outro']).optional(),
+          goal: z
+            .enum(['perda_de_peso', 'hipertrofia', 'manter_massa_muscular'])
+            .optional(),
+        }),
+        response: {
+          200: z.object({
+            message: z.string(),
+          }),
+          400: z.object({ message: z.string() }),
+          401: z.object({ message: z.string() }),
+        },
+      },
+    },
+    async (request, reply) => {
+      const userId = request.user.sub
+      const { ...data } = request.body
+
+      const updateData = {
+        ...data,
+        weight: data.weight !== undefined ? data.weight.toString() : undefined,
+        height: data.height !== undefined ? data.height.toString() : undefined,
+      }
+
+      const updatedUser = await updateUserById(userId, updateData)
+
+      if (!updatedUser) {
+        return reply.status(400).send({ message: 'Erro ao atualizar usuário.' })
+      }
+
+      return reply.status(200).send({
+        message: 'Usuário atualizado com sucesso.',
+      })
     },
   )
 }

@@ -9,6 +9,7 @@ export const plan: FastifyPluginAsyncZod = async (app) => {
     {
       schema: {
         tags: ['Diet Plan'],
+        security: [],
         summary: 'Gera um plano alimentar personalizado',
         description:
           'Recebe os dados do usuário e retorna o plano alimentar em streaming (SSE).',

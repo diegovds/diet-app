@@ -3,8 +3,9 @@ import { db } from '../drizzle/drizzle'
 import { users } from '../drizzle/schema/users'
 
 type NewUser = typeof users.$inferInsert
+type UpdateUser = Partial<NewUser>
 
-export async function findUser(email: string) {
+export async function findUserByEmail(email: string) {
   return await db.query.users.findFirst({
     where: eq(users.email, email),
   })
@@ -14,4 +15,14 @@ export async function insertUser(user: NewUser) {
   const [newUser] = await db.insert(users).values(user).returning()
 
   return newUser
+}
+
+export async function updateUserById(id: string, data: UpdateUser) {
+  const [updatedUser] = await db
+    .update(users)
+    .set(data)
+    .where(eq(users.id, id))
+    .returning()
+
+  return updatedUser
 }
