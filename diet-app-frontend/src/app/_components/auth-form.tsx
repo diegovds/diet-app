@@ -1,5 +1,6 @@
 'use client'
 
+import { setAuthCookie } from '@/actions/set-auth-cookie'
 import { Button } from '@/components/ui/button'
 import {
   Card,
@@ -19,12 +20,14 @@ import {
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import { useAuthMutation } from '@/hooks/use-auth-mutation'
+import { useAuthStore } from '@/store/auth'
 import { AuthFormData, signInSchema, signUpSchema } from '@/types/auth'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 
 export function AuthForm() {
+  const { setToken } = useAuthStore()
   const [isSignin, setIsSignin] = useState(true)
   const form = useForm<AuthFormData>({
     resolver: zodResolver(isSignin ? signInSchema : signUpSchema),
@@ -44,6 +47,17 @@ export function AuthForm() {
   useEffect(() => {
     form.reset()
   }, [isSignin, form])
+
+  useEffect(() => {
+    if (data?.token) {
+      const handleAuth = async () => {
+        await setAuthCookie(data.token)
+        setToken(data.token)
+      }
+
+      handleAuth()
+    }
+  }, [data, setToken])
 
   return (
     <Card className="w-full flex-1 gap-6 border-0 p-5">
