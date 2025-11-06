@@ -148,6 +148,73 @@ export type PatchUser401 = {
   message: string
 }
 
+/**
+ * @nullable
+ */
+export type GetUser200ActivityLevel =
+  | (typeof GetUser200ActivityLevel)[keyof typeof GetUser200ActivityLevel]
+  | null
+
+export const GetUser200ActivityLevel = {
+  sedentario: 'sedentario',
+  '2x_semana': '2x_semana',
+  '4x_semana': '4x_semana',
+} as const
+
+/**
+ * @nullable
+ */
+export type GetUser200Genre =
+  | (typeof GetUser200Genre)[keyof typeof GetUser200Genre]
+  | null
+
+export const GetUser200Genre = {
+  masculino: 'masculino',
+  feminino: 'feminino',
+  outro: 'outro',
+} as const
+
+/**
+ * @nullable
+ */
+export type GetUser200Goal =
+  | (typeof GetUser200Goal)[keyof typeof GetUser200Goal]
+  | null
+
+export const GetUser200Goal = {
+  perda_de_peso: 'perda_de_peso',
+  hipertrofia: 'hipertrofia',
+  manter_massa_muscular: 'manter_massa_muscular',
+} as const
+
+export type GetUser200 = {
+  name: string
+  /** @nullable */
+  weight?: number | null
+  /** @nullable */
+  height?: number | null
+  /** @nullable */
+  age?: number | null
+  /** @nullable */
+  activity_level?: GetUser200ActivityLevel
+  /** @nullable */
+  genre?: GetUser200Genre
+  /** @nullable */
+  goal?: GetUser200Goal
+}
+
+export type GetUser401 = {
+  message: string
+}
+
+export type GetUser404 = {
+  message: string
+}
+
+export type GetUser500 = {
+  message: string
+}
+
 export const getGetUrl = () => {
   return `http://localhost:3333/`
 }
@@ -216,5 +283,19 @@ export const patchUser = async (
     method: 'PATCH',
     headers: { 'Content-Type': 'application/json', ...options?.headers },
     body: JSON.stringify(patchUserBody),
+  })
+}
+
+/**
+ * @summary Retorna os dados do usuário autenticado
+ */
+export const getGetUserUrl = () => {
+  return `http://localhost:3333/user`
+}
+
+export const getUser = async (options?: RequestInit): Promise<GetUser200> => {
+  return customFetch<GetUser200>(getGetUserUrl(), {
+    ...options,
+    method: 'GET',
   })
 }
