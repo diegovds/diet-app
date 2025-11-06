@@ -86,6 +86,68 @@ export type PostAuth404 = {
   message: string
 }
 
+export type PatchUserBodyActivityLevel =
+  (typeof PatchUserBodyActivityLevel)[keyof typeof PatchUserBodyActivityLevel]
+
+export const PatchUserBodyActivityLevel = {
+  sedentario: 'sedentario',
+  '2x_semana': '2x_semana',
+  '4x_semana': '4x_semana',
+} as const
+
+export type PatchUserBodyGenre =
+  (typeof PatchUserBodyGenre)[keyof typeof PatchUserBodyGenre]
+
+export const PatchUserBodyGenre = {
+  masculino: 'masculino',
+  feminino: 'feminino',
+  outro: 'outro',
+} as const
+
+export type PatchUserBodyGoal =
+  (typeof PatchUserBodyGoal)[keyof typeof PatchUserBodyGoal]
+
+export const PatchUserBodyGoal = {
+  perda_de_peso: 'perda_de_peso',
+  hipertrofia: 'hipertrofia',
+  manter_massa_muscular: 'manter_massa_muscular',
+} as const
+
+export type PatchUserBody = {
+  /** @minLength 2 */
+  name?: string
+  /**
+   * @minimum 0
+   * @exclusiveMinimum
+   */
+  weight?: number
+  /**
+   * @minimum 0
+   * @exclusiveMinimum
+   */
+  height?: number
+  /**
+   * @maximum 9007199254740991
+   * @exclusiveMinimum
+   */
+  age?: number
+  activityLevel?: PatchUserBodyActivityLevel
+  genre?: PatchUserBodyGenre
+  goal?: PatchUserBodyGoal
+}
+
+export type PatchUser200 = {
+  message: string
+}
+
+export type PatchUser400 = {
+  message: string
+}
+
+export type PatchUser401 = {
+  message: string
+}
+
 export const getGetUrl = () => {
   return `http://localhost:3333/`
 }
@@ -134,5 +196,25 @@ export const postAuth = async (
     method: 'POST',
     headers: { 'Content-Type': 'application/json', ...options?.headers },
     body: JSON.stringify(postAuthBody),
+  })
+}
+
+/**
+ * Permite ao usuário autenticado atualizar seus próprios dados. Todos os campos são opcionais.
+ * @summary Atualiza os dados do usuário autenticado
+ */
+export const getPatchUserUrl = () => {
+  return `http://localhost:3333/user`
+}
+
+export const patchUser = async (
+  patchUserBody: PatchUserBody,
+  options?: RequestInit,
+): Promise<PatchUser200> => {
+  return customFetch<PatchUser200>(getPatchUserUrl(), {
+    ...options,
+    method: 'PATCH',
+    headers: { 'Content-Type': 'application/json', ...options?.headers },
+    body: JSON.stringify(patchUserBody),
   })
 }
