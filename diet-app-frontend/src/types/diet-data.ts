@@ -1,6 +1,7 @@
 import z from 'zod'
 
 export const DietDataSchema = z.object({
+  name: z.string().min(2),
   weight: z.number().positive(),
   height: z.number().positive(),
   age: z.number().positive().int(),
