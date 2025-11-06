@@ -22,11 +22,12 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select'
+import { useUpdateUserMutation } from '@/hooks/use-update-user-mutation'
 import { DietData, DietDataSchema } from '@/types/diet-data'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 
-export function DietForm() {
+export function DietForm({ token }: { token: string }) {
   const form = useForm<DietData>({
     resolver: zodResolver(DietDataSchema),
     defaultValues: {
@@ -39,8 +40,11 @@ export function DietForm() {
     },
   })
 
-  function onSubmit(userInfo: DietData) {
-    console.log(userInfo)
+  const { mutate, isPending, isError, error, isSuccess } =
+    useUpdateUserMutation(token)
+
+  const onSubmit = (userInfo: DietData) => {
+    mutate(userInfo)
   }
 
   return (
@@ -202,11 +206,27 @@ export function DietForm() {
               />
             </div>
 
-            <Button className="mt-4 w-full cursor-pointer transition-all duration-300 hover:opacity-90">
-              Gerar minha dieta
+            <Button
+              className="mt-4 w-full cursor-pointer transition-all duration-300 hover:opacity-90"
+              disabled={isPending}
+            >
+              {isPending ? 'Salvando...' : 'Salvar alterações'}
             </Button>
           </form>
         </Form>
+        {isError && (
+          <p className="mt-2 text-sm text-red-500">
+            {error instanceof Error
+              ? error.message
+              : 'Erro ao atualizar os dados. Tente novamente.'}
+          </p>
+        )}
+
+        {isSuccess && (
+          <p className="mt-2 text-sm text-green-600">
+            Dados atualizados com sucesso!
+          </p>
+        )}
       </div>
     </Card>
   )
