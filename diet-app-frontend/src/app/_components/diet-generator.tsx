@@ -32,7 +32,7 @@ export function DietGenerator({ data }: { data: DietData }) {
           height: data.height,
           weight: data.weight,
           genre: data.genre,
-          activity_level: data.activity_level,
+          activity_level: data.activityLevel,
           goal: data.goal,
         }),
 
@@ -73,7 +73,7 @@ export function DietGenerator({ data }: { data: DietData }) {
   }
 
   return (
-    <div className="flex min-h-screen flex-col items-center justify-center px-5 py-10">
+    <div className="flex items-center justify-center">
       <Card className="w-full max-w-4xl border-0 p-5">
         <div className="flex justify-center gap-4">
           <Button
