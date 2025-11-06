@@ -1,6 +1,12 @@
+import { getAuthState } from '@/actions/get-auth-state'
+import { redirect } from 'next/navigation'
 import { AuthForm } from './_components/auth-form'
 
-export default function Home() {
+export default async function Home() {
+  const { token } = await getAuthState()
+
+  if (token) return redirect('/plan')
+
   return (
     <div className="flex w-full flex-col items-center justify-center gap-5 md:flex-row">
       <div className="flex w-full flex-2 flex-col items-center">
