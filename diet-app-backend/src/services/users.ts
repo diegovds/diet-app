@@ -5,6 +5,21 @@ import { users } from '../drizzle/schema/users'
 type NewUser = typeof users.$inferInsert
 type UpdateUser = Partial<NewUser>
 
+export async function findUserById(id: string) {
+  return await db.query.users.findFirst({
+    where: eq(users.id, id),
+    columns: {
+      name: true,
+      weight: true,
+      height: true,
+      age: true,
+      activityLevel: true,
+      genre: true,
+      goal: true,
+    },
+  })
+}
+
 export async function findUserByEmail(email: string) {
   return await db.query.users.findFirst({
     where: eq(users.email, email),

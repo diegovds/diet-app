@@ -1,6 +1,11 @@
 import { FastifyPluginAsyncZod } from 'fastify-type-provider-zod'
 import { z } from 'zod'
-import { findUserByEmail, insertUser, updateUserById } from '../services/users'
+import {
+  findUserByEmail,
+  findUserById,
+  insertUser,
+  updateUserById,
+} from '../services/users'
 
 export const auth: FastifyPluginAsyncZod = async (app) => {
   app.post(
@@ -149,6 +154,70 @@ export const updateUser: FastifyPluginAsyncZod = async (app) => {
       return reply.status(200).send({
         message: 'Usuário atualizado com sucesso.',
       })
+    },
+  )
+}
+
+export const getUser: FastifyPluginAsyncZod = async (app) => {
+  app.get(
+    '/user',
+    {
+      preHandler: [app.authenticate],
+      schema: {
+        tags: ['User'],
+        security: [{ bearerAuth: [] }],
+        summary: 'Retorna os dados do usuário autenticado',
+        response: {
+          200: z.object({
+            name: z.string(),
+            weight: z.number().nullable().optional(),
+            height: z.number().nullable().optional(),
+            age: z.number().nullable().optional(),
+            activity_level: z
+              .enum(['sedentario', '2x_semana', '4x_semana'])
+              .nullable()
+              .optional(),
+            genre: z
+              .enum(['masculino', 'feminino', 'outro'])
+              .nullable()
+              .optional(),
+            goal: z
+              .enum(['perda_de_peso', 'hipertrofia', 'manter_massa_muscular'])
+              .nullable()
+              .optional(),
+          }),
+          401: z.object({ message: z.string() }),
+          404: z.object({ message: z.string() }),
+          500: z.object({ message: z.string() }),
+        },
+      },
+    },
+    async (request, reply) => {
+      try {
+        const userId = request.user.sub
+        const user = await findUserById(userId)
+
+        if (!user) {
+          return reply.status(404).send({ message: 'Usuário não encontrado.' })
+        }
+
+        const formattedUser = {
+          ...user,
+          weight:
+            user.weight !== null && user.weight !== undefined
+              ? Number(user.weight)
+              : null,
+          height:
+            user.height !== null && user.height !== undefined
+              ? Number(user.height)
+              : null,
+        }
+
+        return reply.send(formattedUser)
+      } catch (err) {
+        console.error(err)
+        return reply.status(500).send({ message: 'Erro interno do servidor.' })
+      }
     },
   )
 }
