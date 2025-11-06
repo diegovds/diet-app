@@ -173,7 +173,7 @@ export const getUser: FastifyPluginAsyncZod = async (app) => {
             weight: z.number().nullable().optional(),
             height: z.number().nullable().optional(),
             age: z.number().nullable().optional(),
-            activity_level: z
+            activityLevel: z
               .enum(['sedentario', '2x_semana', '4x_semana'])
               .nullable()
               .optional(),
