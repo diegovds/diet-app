@@ -49,7 +49,7 @@ export default async function PlanPage() {
       {userData && !hasAllData && <DietForm token={token} />}
 
       {/* Exibe o gerador se todos os dados estão completos */}
-      {normalizedUser && <DietGenerator data={normalizedUser} />}
+      {normalizedUser && <DietGenerator data={normalizedUser} token={token} />}
     </div>
   )
 }
