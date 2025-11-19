@@ -2,14 +2,23 @@
 
 import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
+import { useInsertPlanMutation } from '@/hooks/use-insert-plan-mutation'
 import { DietData } from '@/types/diet-data'
 import { Loader, Sparkles } from 'lucide-react'
 import { useRef, useState } from 'react'
 import ReactMarkdown from 'react-markdown'
 
-export function DietGenerator({ data }: { data: DietData }) {
+interface DietGeneratorProps {
+  data: DietData
+  token: string
+}
+
+export function DietGenerator({ data, token }: DietGeneratorProps) {
   const [output, setOutput] = useState('')
   const [isStreaming, setIsStreaming] = useState(false)
+  // adicionar verificaçoes de loading e error
+  const { mutate, isPending, isError, error, isSuccess } =
+    useInsertPlanMutation(token)
 
   const controllerRef = useRef<AbortController | null>(null)
 
@@ -21,10 +30,11 @@ export function DietGenerator({ data }: { data: DietData }) {
     setIsStreaming(true)
 
     try {
-      const response = await fetch('http://localhost:3333/plan', {
+      const response = await fetch('http://localhost:3333/planGeneration', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify({
           name: data.name,
@@ -59,6 +69,9 @@ export function DietGenerator({ data }: { data: DietData }) {
     } finally {
       setIsStreaming(false)
       controllerRef.current = null
+      if (output !== '') {
+        mutate({ content: output })
+      }
     }
   }
 
