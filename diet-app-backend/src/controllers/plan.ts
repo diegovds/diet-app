@@ -2,14 +2,16 @@ import { FastifyPluginAsyncZod } from 'fastify-type-provider-zod'
 import z from 'zod'
 import { generateDietPlan } from '../agent'
 import { DietPlanRequest, DietPlanRequestSchema } from '../schemas/diets'
+import { insertPlan } from '../services/plans'
 
 export const plan: FastifyPluginAsyncZod = async (app) => {
   app.post<{ Body: DietPlanRequest }>(
-    '/plan',
+    '/planGeneration',
     {
+      preHandler: [app.authenticate],
       schema: {
         tags: ['Diet Plan'],
-        security: [],
+        security: [{ bearerAuth: [] }],
         summary: 'Gera um plano alimentar personalizado',
         description:
           'Recebe os dados do usuário e retorna o plano alimentar em streaming (SSE).',
@@ -47,6 +49,54 @@ export const plan: FastifyPluginAsyncZod = async (app) => {
       }
 
       return reply
+    },
+  )
+}
+
+export const planInsertion: FastifyPluginAsyncZod = async (app) => {
+  app.post(
+    '/planInsertion',
+    {
+      preHandler: [app.authenticate],
+      schema: {
+        tags: ['Diet Plan'],
+        security: [{ bearerAuth: [] }],
+        summary: 'Cria o plano alimentar do usuário',
+        description:
+          'Insere o plano alimentar de um usuário (cada usuário só pode ter 1 plano).',
+        body: z.object({
+          content: z.string(),
+        }),
+        response: {
+          200: z.object({
+            success: z.boolean(),
+            planId: z.uuid(),
+          }),
+          400: z.object({
+            error: z.string(),
+            details: z.any(),
+          }),
+        },
+      },
+    },
+    async (request, reply) => {
+      const userId = request.user.sub
+      const { content } = request.body
+
+      try {
+        const newPlan = await insertPlan({ content, userId })
+
+        return reply.send({
+          success: true,
+          planId: newPlan.id,
+        })
+      } catch (err) {
+        request.log.error(err)
+        return reply.status(400).send({
+          error: 'Erro ao salvar plano.',
+          details: err,
+        })
+      }
     },
   )
 }

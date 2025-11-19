@@ -1,5 +1,5 @@
 import { FastifyInstance } from 'fastify'
-import { plan } from '../controllers/plan'
+import { plan, planInsertion } from '../controllers/plan'
 import { auth, getUser, updateUser } from '../controllers/user'
 import { env } from '../env'
 
@@ -14,4 +14,5 @@ export async function routes(app: FastifyInstance) {
   app.register(auth)
   app.register(updateUser)
   app.register(getUser)
+  app.register(planInsertion)
 }
