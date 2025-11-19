@@ -6,34 +6,34 @@
  * OpenAPI spec version: 0.0.1
  */
 import { customFetch } from '../../fetchMutator'
-export type PostPlanBodyActivityLevel =
-  (typeof PostPlanBodyActivityLevel)[keyof typeof PostPlanBodyActivityLevel]
+export type PostPlanGenerationBodyActivityLevel =
+  (typeof PostPlanGenerationBodyActivityLevel)[keyof typeof PostPlanGenerationBodyActivityLevel]
 
-export const PostPlanBodyActivityLevel = {
+export const PostPlanGenerationBodyActivityLevel = {
   sedentario: 'sedentario',
   '2x_semana': '2x_semana',
   '4x_semana': '4x_semana',
 } as const
 
-export type PostPlanBodyGenre =
-  (typeof PostPlanBodyGenre)[keyof typeof PostPlanBodyGenre]
+export type PostPlanGenerationBodyGenre =
+  (typeof PostPlanGenerationBodyGenre)[keyof typeof PostPlanGenerationBodyGenre]
 
-export const PostPlanBodyGenre = {
+export const PostPlanGenerationBodyGenre = {
   masculino: 'masculino',
   feminino: 'feminino',
   outro: 'outro',
 } as const
 
-export type PostPlanBodyGoal =
-  (typeof PostPlanBodyGoal)[keyof typeof PostPlanBodyGoal]
+export type PostPlanGenerationBodyGoal =
+  (typeof PostPlanGenerationBodyGoal)[keyof typeof PostPlanGenerationBodyGoal]
 
-export const PostPlanBodyGoal = {
+export const PostPlanGenerationBodyGoal = {
   perda_de_peso: 'perda_de_peso',
   hipertrofia: 'hipertrofia',
   manter_massa_muscular: 'manter_massa_muscular',
 } as const
 
-export type PostPlanBody = {
+export type PostPlanGenerationBody = {
   /** @minLength 2 */
   name: string
   /**
@@ -51,12 +51,12 @@ export type PostPlanBody = {
    * @exclusiveMinimum
    */
   age: number
-  activity_level: PostPlanBodyActivityLevel
-  genre: PostPlanBodyGenre
-  goal: PostPlanBodyGoal
+  activity_level: PostPlanGenerationBodyActivityLevel
+  genre: PostPlanGenerationBodyGenre
+  goal: PostPlanGenerationBodyGoal
 }
 
-export type PostPlan400 = {
+export type PostPlanGeneration400 = {
   error: string
   details: unknown
 }
@@ -215,6 +215,21 @@ export type GetUser500 = {
   message: string
 }
 
+export type PostPlanInsertionBody = {
+  content: string
+}
+
+export type PostPlanInsertion200 = {
+  success: boolean
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  planId: string
+}
+
+export type PostPlanInsertion400 = {
+  error: string
+  details: unknown
+}
+
 export const getGetUrl = () => {
   return `http://localhost:3333/`
 }
@@ -230,19 +245,19 @@ export const get = async (options?: RequestInit): Promise<void> => {
  * Recebe os dados do usuário e retorna o plano alimentar em streaming (SSE).
  * @summary Gera um plano alimentar personalizado
  */
-export const getPostPlanUrl = () => {
-  return `http://localhost:3333/plan`
+export const getPostPlanGenerationUrl = () => {
+  return `http://localhost:3333/planGeneration`
 }
 
-export const postPlan = async (
-  postPlanBody: PostPlanBody,
+export const postPlanGeneration = async (
+  postPlanGenerationBody: PostPlanGenerationBody,
   options?: RequestInit,
 ): Promise<string> => {
-  return customFetch<string>(getPostPlanUrl(), {
+  return customFetch<string>(getPostPlanGenerationUrl(), {
     ...options,
     method: 'POST',
     headers: { 'Content-Type': 'application/json', ...options?.headers },
-    body: JSON.stringify(postPlanBody),
+    body: JSON.stringify(postPlanGenerationBody),
   })
 }
 
@@ -297,5 +312,25 @@ export const getUser = async (options?: RequestInit): Promise<GetUser200> => {
   return customFetch<GetUser200>(getGetUserUrl(), {
     ...options,
     method: 'GET',
+  })
+}
+
+/**
+ * Insere o plano alimentar de um usuário (cada usuário só pode ter 1 plano).
+ * @summary Cria o plano alimentar do usuário
+ */
+export const getPostPlanInsertionUrl = () => {
+  return `http://localhost:3333/planInsertion`
+}
+
+export const postPlanInsertion = async (
+  postPlanInsertionBody: PostPlanInsertionBody,
+  options?: RequestInit,
+): Promise<PostPlanInsertion200> => {
+  return customFetch<PostPlanInsertion200>(getPostPlanInsertionUrl(), {
+    ...options,
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', ...options?.headers },
+    body: JSON.stringify(postPlanInsertionBody),
   })
 }
