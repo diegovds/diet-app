@@ -1,5 +1,5 @@
 import { getAuthState } from '@/actions/get-auth-state'
-import { getGetPlan, GetGetPlan200, getUser, GetUser200 } from '@/http/api'
+import { getUser, GetUser200 } from '@/http/api'
 import { redirect } from 'next/navigation'
 import ReactMarkdown from 'react-markdown'
 import { DietForm } from '../_components/diet-form'
@@ -11,7 +11,6 @@ export default async function PlanPage() {
   if (!token) return redirect('/')
 
   let userData: GetUser200 | null = null
-  let plan: GetGetPlan200 | null = null
 
   try {
     userData = await getUser({
@@ -19,15 +18,9 @@ export default async function PlanPage() {
         Authorization: `Bearer ${token}`,
       },
     })
-  } catch {}
-
-  try {
-    plan = await getGetPlan({
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    })
-  } catch {}
+  } catch {
+    redirect('/')
+  }
 
   const hasAllData =
     userData &&
@@ -54,16 +47,16 @@ export default async function PlanPage() {
   return (
     <div className="flex w-full items-center justify-center">
       {/* Exibe o formulário se userData existe e há campos faltando */}
-      {userData && !hasAllData && !plan && (
+      {userData && !hasAllData && !userData.plan && (
         <DietForm token={token} userData={userData} />
       )}
 
       {/* Exibe o gerador se todos os dados estão completos */}
-      {normalizedUser && !plan && (
+      {normalizedUser && userData && !userData.plan && (
         <DietGenerator data={normalizedUser} token={token} />
       )}
 
-      {plan && (
+      {userData && userData.plan && (
         <div className="rounded-lg bg-gray-100 p-4 shadow-md">
           <ReactMarkdown
             components={{
@@ -81,7 +74,7 @@ export default async function PlanPage() {
               ),
             }}
           >
-            {plan.content}
+            {userData.plan.content}
           </ReactMarkdown>
         </div>
       )}

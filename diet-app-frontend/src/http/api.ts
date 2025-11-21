@@ -187,6 +187,19 @@ export const GetUser200Goal = {
   manter_massa_muscular: 'manter_massa_muscular',
 } as const
 
+/**
+ * @nullable
+ */
+export type GetUser200Plan = {
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  id: string
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  userId: string
+  content: string
+  /** @nullable */
+  createdAt: string | null
+} | null
+
 export type GetUser200 = {
   name: string
   /** @nullable */
@@ -201,6 +214,8 @@ export type GetUser200 = {
   genre?: GetUser200Genre
   /** @nullable */
   goal?: GetUser200Goal
+  /** @nullable */
+  plan?: GetUser200Plan
 }
 
 export type GetUser401 = {
