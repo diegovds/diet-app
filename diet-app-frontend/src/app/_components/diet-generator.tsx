@@ -2,10 +2,9 @@
 
 import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
-import { useInsertPlanMutation } from '@/hooks/use-insert-plan-mutation'
+import { useGeneratePlanMutation } from '@/hooks/use-generate-plan-mutation'
 import { DietData } from '@/types/diet-data'
 import { Loader, Sparkles } from 'lucide-react'
-import { useRef, useState } from 'react'
 import ReactMarkdown from 'react-markdown'
 
 interface DietGeneratorProps {
@@ -14,77 +13,24 @@ interface DietGeneratorProps {
 }
 
 export function DietGenerator({ data, token }: DietGeneratorProps) {
-  const [output, setOutput] = useState('')
-  const [isStreaming, setIsStreaming] = useState(false)
-  // adicionar verificaçoes de loading e error
   // verificar se já tem um plano salvo e mostrar ele ou permitir gerar caso não tenha,
   // posteriormente add a fução de atualizar plano
-  const { mutate, isPending, isError, error, isSuccess } =
-    useInsertPlanMutation(token)
 
-  const controllerRef = useRef<AbortController | null>(null)
+  const {
+    mutate: generatePlan,
+    output,
+    isStreaming,
+    isSaving,
+    cancel,
+  } = useGeneratePlanMutation(token)
 
-  async function startStreaming() {
-    const controller = new AbortController()
-    controllerRef.current = controller
-
-    setOutput('')
-    setIsStreaming(true)
-
-    try {
-      const response = await fetch('http://localhost:3333/genPlan', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify({
-          name: data.name,
-          age: data.age,
-          height: data.height,
-          weight: data.weight,
-          genre: data.genre,
-          activity_level: data.activityLevel,
-          goal: data.goal,
-        }),
-
-        // PERMITE CANCELAR A REQ A QUALQUER MOMENTO
-        signal: controller.signal,
-      })
-
-      const reader = response.body?.getReader()
-      const decoder = new TextDecoder('utf-8')
-
-      while (true) {
-        const { done, value } = await reader!.read()
-        if (done) break
-
-        setOutput((prev) => prev + decoder.decode(value))
-      }
-    } catch (err: any) {
-      if (err.name === 'AbortError') {
-        console.log('REQUEST CANCELADA')
-        return
-      }
-
-      console.log(err)
-    } finally {
-      setIsStreaming(false)
-      controllerRef.current = null
-      if (output !== '') {
-        mutate({ content: output })
-      }
-    }
-  }
-
-  async function handleGenerate() {
+  function handleGenerate() {
     if (isStreaming) {
-      controllerRef.current?.abort()
-      setIsStreaming(false)
+      cancel()
       return
     }
 
-    await startStreaming()
+    generatePlan(data)
   }
 
   return (
