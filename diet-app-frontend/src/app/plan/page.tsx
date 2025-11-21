@@ -1,5 +1,5 @@
 import { getAuthState } from '@/actions/get-auth-state'
-import { getUser, GetUser200 } from '@/http/api'
+import { getGetPlan, GetGetPlan200, getUser, GetUser200 } from '@/http/api'
 import { redirect } from 'next/navigation'
 import { DietForm } from '../_components/diet-form'
 import { DietGenerator } from '../_components/diet-generator'
@@ -10,6 +10,7 @@ export default async function PlanPage() {
   if (!token) return redirect('/')
 
   let userData: GetUser200 | null = null
+  let plan: GetGetPlan200 | null = null
 
   try {
     userData = await getUser({
@@ -19,6 +20,16 @@ export default async function PlanPage() {
     })
   } catch (err) {
     console.error('Erro ao buscar usuário:', err)
+  }
+
+  try {
+    plan = await getGetPlan({
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
+  } catch (err) {
+    console.error('Erro ao buscar plano:', err)
   }
 
   const hasAllData =
@@ -46,10 +57,12 @@ export default async function PlanPage() {
   return (
     <div className="flex w-full items-center justify-center">
       {/* Exibe o formulário se userData existe e há campos faltando */}
-      {userData && !hasAllData && <DietForm token={token} />}
+      {userData && !hasAllData && !plan && <DietForm token={token} />}
 
       {/* Exibe o gerador se todos os dados estão completos */}
-      {normalizedUser && <DietGenerator data={normalizedUser} token={token} />}
+      {normalizedUser && !plan && (
+        <DietGenerator data={normalizedUser} token={token} />
+      )}
     </div>
   )
 }
