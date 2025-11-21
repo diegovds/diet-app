@@ -2,11 +2,12 @@ import { FastifyPluginAsyncZod } from 'fastify-type-provider-zod'
 import z from 'zod'
 import { generateDietPlan } from '../agent'
 import { DietPlanRequest, DietPlanRequestSchema } from '../schemas/diets'
-import { insertPlan } from '../services/plans'
+import { planResponseSchema } from '../schemas/plans'
+import { getPlan as _getPlan, insertPlan } from '../services/plans'
 
 export const plan: FastifyPluginAsyncZod = async (app) => {
   app.post<{ Body: DietPlanRequest }>(
-    '/planGeneration',
+    '/genPlan',
     {
       preHandler: [app.authenticate],
       schema: {
@@ -55,7 +56,7 @@ export const plan: FastifyPluginAsyncZod = async (app) => {
 
 export const planInsertion: FastifyPluginAsyncZod = async (app) => {
   app.post(
-    '/planInsertion',
+    '/postPlan',
     {
       preHandler: [app.authenticate],
       schema: {
@@ -88,12 +89,50 @@ export const planInsertion: FastifyPluginAsyncZod = async (app) => {
 
         return reply.send({
           success: true,
-          planId: newPlan.id,
+          planId: newPlan,
         })
       } catch (err) {
         request.log.error(err)
         return reply.status(400).send({
           error: 'Erro ao salvar plano.',
+          details: err,
+        })
+      }
+    },
+  )
+}
+
+export const getPlan: FastifyPluginAsyncZod = async (app) => {
+  app.get(
+    '/getPlan',
+    {
+      preHandler: [app.authenticate],
+      schema: {
+        tags: ['Diet Plan'],
+        security: [{ bearerAuth: [] }],
+        summary: 'Pega o plano alimentar do usuário',
+        description:
+          'Pega o plano alimentar de um usuário (cada usuário só pode ter 1 plano).',
+        response: {
+          200: planResponseSchema,
+          400: z.object({
+            error: z.string(),
+            details: z.any(),
+          }),
+        },
+      },
+    },
+    async (request, reply) => {
+      const userId = request.user.sub
+
+      try {
+        const plan = await _getPlan(userId)
+
+        return reply.send({ ...plan })
+      } catch (err) {
+        request.log.error(err)
+        return reply.status(400).send({
+          error: 'Erro ao pegar plano alimentar.',
           details: err,
         })
       }
