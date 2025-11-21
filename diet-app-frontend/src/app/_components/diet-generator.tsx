@@ -32,7 +32,7 @@ export function DietGenerator({ data, token }: DietGeneratorProps) {
     setIsStreaming(true)
 
     try {
-      const response = await fetch('http://localhost:3333/planGeneration', {
+      const response = await fetch('http://localhost:3333/genPlan', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
