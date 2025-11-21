@@ -8,6 +8,7 @@ export function useGeneratePlanMutation(token: string) {
   const [output, setOutput] = useState('')
   const [isStreaming, setIsStreaming] = useState(false)
   const [isSaving, setIsSaving] = useState(false)
+  const [isError, setIsError] = useState(false)
 
   const { mutateAsync: savePlan } = useInsertPlanMutation(token)
 
@@ -59,6 +60,8 @@ export function useGeneratePlanMutation(token: string) {
       setIsSaving(true)
       try {
         await savePlan({ content: generatedText })
+      } catch {
+        setIsError(true)
       } finally {
         setIsSaving(false)
       }
@@ -70,6 +73,7 @@ export function useGeneratePlanMutation(token: string) {
     output,
     isStreaming,
     isSaving,
+    isError,
     cancel: () => controllerRef.current?.abort(),
   }
 }
