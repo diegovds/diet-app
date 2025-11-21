@@ -15,10 +15,7 @@ interface DietGeneratorProps {
 }
 
 export function DietGenerator({ data, token }: DietGeneratorProps) {
-  // verificar se já tem um plano salvo e mostrar ele ou permitir gerar caso não tenha,
   // posteriormente add a fução de atualizar plano
-
-  // verificar pq o cadastro do rafael não ta direcionando para a páginha de gerar plano
 
   const {
     mutate: generatePlan,
@@ -57,7 +54,7 @@ export function DietGenerator({ data, token }: DietGeneratorProps) {
             {isStreaming ? (
               <Loader className="animate-spin" />
             ) : (
-              <Sparkles name="w-6 h-6" />
+              <Sparkles className="h-6 w-6" />
             )}
             {isStreaming ? 'Parar dieta' : 'Gerar dieta'}
           </Button>
