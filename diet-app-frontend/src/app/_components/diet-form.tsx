@@ -23,22 +23,29 @@ import {
   SelectValue,
 } from '@/components/ui/select'
 import { useUpdateUserMutation } from '@/hooks/use-update-user-mutation'
+import { GetUser200 } from '@/http/api'
 import { DietData, DietDataSchema } from '@/types/diet-data'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useRouter } from 'next/navigation'
 import { useForm } from 'react-hook-form'
 
-export function DietForm({ token }: { token: string }) {
+interface DietFormProps {
+  token: string
+  userData: GetUser200
+}
+
+export function DietForm({ userData, token }: DietFormProps) {
   const router = useRouter()
   const form = useForm<DietData>({
     resolver: zodResolver(DietDataSchema),
     defaultValues: {
-      weight: undefined,
-      height: undefined,
-      age: undefined,
-      activity_level: undefined,
-      genre: undefined,
-      goal: undefined,
+      name: userData.name,
+      weight: userData.weight || undefined,
+      height: userData.height || undefined,
+      age: userData.age || undefined,
+      activity_level: userData.activityLevel || undefined,
+      genre: userData.genre || undefined,
+      goal: userData.goal || undefined,
     },
   })
 
