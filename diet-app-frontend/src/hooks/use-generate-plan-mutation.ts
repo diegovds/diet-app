@@ -7,7 +7,9 @@ export function useGeneratePlanMutation(token: string) {
   const controllerRef = useRef<AbortController | null>(null)
   const [output, setOutput] = useState('')
   const [isStreaming, setIsStreaming] = useState(false)
-  const { mutate } = useInsertPlanMutation(token)
+  const [isSaving, setIsSaving] = useState(false)
+
+  const { mutateAsync: savePlan } = useInsertPlanMutation(token)
 
   const mutation = useMutation({
     mutationFn: async (data: PostGenPlanBody) => {
@@ -48,16 +50,18 @@ export function useGeneratePlanMutation(token: string) {
       } finally {
         setIsStreaming(false)
         controllerRef.current = null
-
-        if (output !== '') {
-          mutate({ content: output })
-        }
       }
     },
 
-    onSuccess: (generatedText) => {
+    onSuccess: async (generatedText) => {
       if (!generatedText) return
-      console.log('Plano completo:', generatedText)
+
+      setIsSaving(true)
+      try {
+        await savePlan({ content: generatedText })
+      } finally {
+        setIsSaving(false)
+      }
     },
   })
 
@@ -65,6 +69,7 @@ export function useGeneratePlanMutation(token: string) {
     ...mutation,
     output,
     isStreaming,
+    isSaving,
     cancel: () => controllerRef.current?.abort(),
   }
 }
