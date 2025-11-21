@@ -186,7 +186,7 @@ export const getUser: FastifyPluginAsyncZod = async (app) => {
               .enum(['perda_de_peso', 'hipertrofia', 'manter_massa_muscular'])
               .nullable()
               .optional(),
-            plan: planResponseSchema.optional(),
+            plan: planResponseSchema.nullable().optional(),
           }),
           401: z.object({ message: z.string() }),
           404: z.object({ message: z.string() }),
@@ -198,6 +198,7 @@ export const getUser: FastifyPluginAsyncZod = async (app) => {
       try {
         const userId = request.user.sub
         const user = await findUserById(userId)
+        console.log(user)
 
         if (!user) {
           return reply.status(404).send({ message: 'Usuário não encontrado.' })
