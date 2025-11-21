@@ -24,7 +24,7 @@ export function buildUserPrompt(input: DietPlanRequest) {
     `- Altura em cm: ${input.height}`,
     `- Peso em kg: ${input.weight}`,
     `- Sexo: ${input.genre}`,
-    `- Nivel de atividade: ${input.activity_level}`,
+    `- Nivel de atividade: ${input.activityLevel}`,
     `- Objetivo: ${input.goal}`,
   ].join('\n')
 }
