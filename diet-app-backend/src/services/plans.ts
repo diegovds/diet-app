@@ -1,6 +1,6 @@
 import { eq } from 'drizzle-orm'
 import { db } from '../drizzle/drizzle'
-import { plans } from '../drizzle/schema/plan'
+import { plans } from '../drizzle/schema/plans'
 import { Plan } from '../schemas/plans'
 
 export async function insertPlan(plan: Plan) {

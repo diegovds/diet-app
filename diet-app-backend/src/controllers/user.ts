@@ -1,5 +1,6 @@
 import { FastifyPluginAsyncZod } from 'fastify-type-provider-zod'
 import { z } from 'zod'
+import { planResponseSchema } from '../schemas/plans'
 import {
   findUserByEmail,
   findUserById,
@@ -185,6 +186,7 @@ export const getUser: FastifyPluginAsyncZod = async (app) => {
               .enum(['perda_de_peso', 'hipertrofia', 'manter_massa_muscular'])
               .nullable()
               .optional(),
+            plan: planResponseSchema.optional(),
           }),
           401: z.object({ message: z.string() }),
           404: z.object({ message: z.string() }),

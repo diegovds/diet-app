@@ -9,6 +9,7 @@ export async function findUserById(id: string) {
   return await db.query.users.findFirst({
     where: eq(users.id, id),
     columns: {
+      id: true,
       name: true,
       weight: true,
       height: true,
@@ -16,6 +17,16 @@ export async function findUserById(id: string) {
       activityLevel: true,
       genre: true,
       goal: true,
+    },
+    with: {
+      plan: {
+        columns: {
+          id: true,
+          content: true,
+          createdAt: true,
+          userId: true,
+        },
+      },
     },
   })
 }
