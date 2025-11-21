@@ -6,34 +6,34 @@
  * OpenAPI spec version: 0.0.1
  */
 import { customFetch } from '../../fetchMutator'
-export type PostPlanGenerationBodyActivityLevel =
-  (typeof PostPlanGenerationBodyActivityLevel)[keyof typeof PostPlanGenerationBodyActivityLevel]
+export type PostGenPlanBodyActivityLevel =
+  (typeof PostGenPlanBodyActivityLevel)[keyof typeof PostGenPlanBodyActivityLevel]
 
-export const PostPlanGenerationBodyActivityLevel = {
+export const PostGenPlanBodyActivityLevel = {
   sedentario: 'sedentario',
   '2x_semana': '2x_semana',
   '4x_semana': '4x_semana',
 } as const
 
-export type PostPlanGenerationBodyGenre =
-  (typeof PostPlanGenerationBodyGenre)[keyof typeof PostPlanGenerationBodyGenre]
+export type PostGenPlanBodyGenre =
+  (typeof PostGenPlanBodyGenre)[keyof typeof PostGenPlanBodyGenre]
 
-export const PostPlanGenerationBodyGenre = {
+export const PostGenPlanBodyGenre = {
   masculino: 'masculino',
   feminino: 'feminino',
   outro: 'outro',
 } as const
 
-export type PostPlanGenerationBodyGoal =
-  (typeof PostPlanGenerationBodyGoal)[keyof typeof PostPlanGenerationBodyGoal]
+export type PostGenPlanBodyGoal =
+  (typeof PostGenPlanBodyGoal)[keyof typeof PostGenPlanBodyGoal]
 
-export const PostPlanGenerationBodyGoal = {
+export const PostGenPlanBodyGoal = {
   perda_de_peso: 'perda_de_peso',
   hipertrofia: 'hipertrofia',
   manter_massa_muscular: 'manter_massa_muscular',
 } as const
 
-export type PostPlanGenerationBody = {
+export type PostGenPlanBody = {
   /** @minLength 2 */
   name: string
   /**
@@ -51,12 +51,12 @@ export type PostPlanGenerationBody = {
    * @exclusiveMinimum
    */
   age: number
-  activity_level: PostPlanGenerationBodyActivityLevel
-  genre: PostPlanGenerationBodyGenre
-  goal: PostPlanGenerationBodyGoal
+  activity_level: PostGenPlanBodyActivityLevel
+  genre: PostGenPlanBodyGenre
+  goal: PostGenPlanBodyGoal
 }
 
-export type PostPlanGeneration400 = {
+export type PostGenPlan400 = {
   error: string
   details: unknown
 }
@@ -215,17 +215,32 @@ export type GetUser500 = {
   message: string
 }
 
-export type PostPlanInsertionBody = {
+export type PostPostPlanBody = {
   content: string
 }
 
-export type PostPlanInsertion200 = {
+export type PostPostPlan200 = {
   success: boolean
   /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
   planId: string
 }
 
-export type PostPlanInsertion400 = {
+export type PostPostPlan400 = {
+  error: string
+  details: unknown
+}
+
+export type GetGetPlan200 = {
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  id: string
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  userId: string
+  content: string
+  /** @nullable */
+  createdAt: string | null
+}
+
+export type GetGetPlan400 = {
   error: string
   details: unknown
 }
@@ -245,19 +260,19 @@ export const get = async (options?: RequestInit): Promise<void> => {
  * Recebe os dados do usuário e retorna o plano alimentar em streaming (SSE).
  * @summary Gera um plano alimentar personalizado
  */
-export const getPostPlanGenerationUrl = () => {
-  return `http://localhost:3333/planGeneration`
+export const getPostGenPlanUrl = () => {
+  return `http://localhost:3333/genPlan`
 }
 
-export const postPlanGeneration = async (
-  postPlanGenerationBody: PostPlanGenerationBody,
+export const postGenPlan = async (
+  postGenPlanBody: PostGenPlanBody,
   options?: RequestInit,
 ): Promise<string> => {
-  return customFetch<string>(getPostPlanGenerationUrl(), {
+  return customFetch<string>(getPostGenPlanUrl(), {
     ...options,
     method: 'POST',
     headers: { 'Content-Type': 'application/json', ...options?.headers },
-    body: JSON.stringify(postPlanGenerationBody),
+    body: JSON.stringify(postGenPlanBody),
   })
 }
 
@@ -319,18 +334,35 @@ export const getUser = async (options?: RequestInit): Promise<GetUser200> => {
  * Insere o plano alimentar de um usuário (cada usuário só pode ter 1 plano).
  * @summary Cria o plano alimentar do usuário
  */
-export const getPostPlanInsertionUrl = () => {
-  return `http://localhost:3333/planInsertion`
+export const getPostPostPlanUrl = () => {
+  return `http://localhost:3333/postPlan`
 }
 
-export const postPlanInsertion = async (
-  postPlanInsertionBody: PostPlanInsertionBody,
+export const postPostPlan = async (
+  postPostPlanBody: PostPostPlanBody,
   options?: RequestInit,
-): Promise<PostPlanInsertion200> => {
-  return customFetch<PostPlanInsertion200>(getPostPlanInsertionUrl(), {
+): Promise<PostPostPlan200> => {
+  return customFetch<PostPostPlan200>(getPostPostPlanUrl(), {
     ...options,
     method: 'POST',
     headers: { 'Content-Type': 'application/json', ...options?.headers },
-    body: JSON.stringify(postPlanInsertionBody),
+    body: JSON.stringify(postPostPlanBody),
+  })
+}
+
+/**
+ * Pega o plano alimentar de um usuário (cada usuário só pode ter 1 plano).
+ * @summary Pega o plano alimentar do usuário
+ */
+export const getGetGetPlanUrl = () => {
+  return `http://localhost:3333/getPlan`
+}
+
+export const getGetPlan = async (
+  options?: RequestInit,
+): Promise<GetGetPlan200> => {
+  return customFetch<GetGetPlan200>(getGetGetPlanUrl(), {
+    ...options,
+    method: 'GET',
   })
 }
