@@ -1,10 +1,10 @@
-import { postPlanInsertion, PostPlanInsertionBody } from '@/http/api'
+import { postPostPlan, PostPostPlanBody } from '@/http/api'
 import { useMutation } from '@tanstack/react-query'
 
 export function useInsertPlanMutation(token: string) {
   return useMutation({
-    mutationFn: (data: PostPlanInsertionBody) =>
-      postPlanInsertion(data, {
+    mutationFn: (data: PostPostPlanBody) =>
+      postPostPlan(data, {
         headers: { Authorization: `Bearer ${token}` },
       }),
 
