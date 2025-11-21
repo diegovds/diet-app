@@ -21,6 +21,7 @@ export function DietGenerator({ data, token }: DietGeneratorProps) {
     output,
     isStreaming,
     isSaving,
+    isError,
     cancel,
   } = useGeneratePlanMutation(token)
 
