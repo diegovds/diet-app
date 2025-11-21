@@ -51,7 +51,7 @@ export type PostGenPlanBody = {
    * @exclusiveMinimum
    */
   age: number
-  activity_level: PostGenPlanBodyActivityLevel
+  activityLevel: PostGenPlanBodyActivityLevel
   genre: PostGenPlanBodyGenre
   goal: PostGenPlanBodyGoal
 }

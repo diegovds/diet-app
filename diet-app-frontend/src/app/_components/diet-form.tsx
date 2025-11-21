@@ -43,7 +43,7 @@ export function DietForm({ userData, token }: DietFormProps) {
       weight: userData.weight || undefined,
       height: userData.height || undefined,
       age: userData.age || undefined,
-      activity_level: userData.activityLevel || undefined,
+      activityLevel: userData.activityLevel || undefined,
       genre: userData.genre || undefined,
       goal: userData.goal || undefined,
     },
@@ -53,8 +53,11 @@ export function DietForm({ userData, token }: DietFormProps) {
     useUpdateUserMutation(token)
 
   const onSubmit = (userInfo: DietData) => {
-    mutate(userInfo)
-    router.refresh()
+    mutate(userInfo, {
+      onSuccess: () => {
+        router.refresh()
+      },
+    })
   }
 
   return (
@@ -162,7 +165,7 @@ export function DietForm({ userData, token }: DietFormProps) {
 
               <FormField
                 control={form.control}
-                name="activity_level"
+                name="activityLevel"
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Nível de atividade</FormLabel>

@@ -19,9 +19,7 @@ export default async function PlanPage() {
         Authorization: `Bearer ${token}`,
       },
     })
-  } catch (err) {
-    console.error('Erro ao buscar usuário:', err)
-  }
+  } catch {}
 
   try {
     plan = await getGetPlan({
@@ -29,9 +27,7 @@ export default async function PlanPage() {
         Authorization: `Bearer ${token}`,
       },
     })
-  } catch (err) {
-    console.error('Erro ao buscar plano:', err)
-  }
+  } catch {}
 
   const hasAllData =
     userData &&
@@ -49,7 +45,7 @@ export default async function PlanPage() {
           weight: userData.weight!,
           height: userData.height!,
           age: userData.age!,
-          activity_level: userData.activityLevel!,
+          activityLevel: userData.activityLevel!,
           genre: userData.genre!,
           goal: userData.goal!,
         }
@@ -58,7 +54,9 @@ export default async function PlanPage() {
   return (
     <div className="flex w-full items-center justify-center">
       {/* Exibe o formulário se userData existe e há campos faltando */}
-      {userData && !hasAllData && !plan && <DietForm token={token} />}
+      {userData && !hasAllData && !plan && (
+        <DietForm token={token} userData={userData} />
+      )}
 
       {/* Exibe o gerador se todos os dados estão completos */}
       {normalizedUser && !plan && (

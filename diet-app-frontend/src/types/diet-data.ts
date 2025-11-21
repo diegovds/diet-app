@@ -5,7 +5,7 @@ export const DietDataSchema = z.object({
   weight: z.number().positive(),
   height: z.number().positive(),
   age: z.number().positive().int(),
-  activity_level: z.enum(['sedentario', '2x_semana', '4x_semana']),
+  activityLevel: z.enum(['sedentario', '2x_semana', '4x_semana']),
   genre: z.enum(['masculino', 'feminino', 'outro']),
   goal: z.enum(['perda_de_peso', 'hipertrofia', 'manter_massa_muscular']),
 })
