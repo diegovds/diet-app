@@ -18,6 +18,8 @@ export function DietGenerator({ data, token }: DietGeneratorProps) {
   // verificar se já tem um plano salvo e mostrar ele ou permitir gerar caso não tenha,
   // posteriormente add a fução de atualizar plano
 
+  // verificar pq o cadastro do rafael não ta direcionando para a páginha de gerar plano
+
   const {
     mutate: generatePlan,
     output,
