@@ -37,7 +37,7 @@ export default async function PlanPage() {
           weight: userData.weight!,
           height: userData.height!,
           age: userData.age!,
-          activityLevel: userData.activityLevel!,
+          activity_level: userData.activityLevel!,
           genre: userData.genre!,
           goal: userData.goal!,
         }

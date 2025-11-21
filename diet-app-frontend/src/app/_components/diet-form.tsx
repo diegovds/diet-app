@@ -36,7 +36,7 @@ export function DietForm({ token }: { token: string }) {
       weight: undefined,
       height: undefined,
       age: undefined,
-      activityLevel: undefined,
+      activity_level: undefined,
       genre: undefined,
       goal: undefined,
     },
@@ -155,7 +155,7 @@ export function DietForm({ token }: { token: string }) {
 
               <FormField
                 control={form.control}
-                name="activityLevel"
+                name="activity_level"
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Nível de atividade</FormLabel>
