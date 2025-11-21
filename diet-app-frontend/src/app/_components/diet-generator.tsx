@@ -5,6 +5,8 @@ import { Card } from '@/components/ui/card'
 import { useGeneratePlanMutation } from '@/hooks/use-generate-plan-mutation'
 import { DietData } from '@/types/diet-data'
 import { Loader, Sparkles } from 'lucide-react'
+import { useRouter } from 'next/navigation'
+import { useEffect } from 'react'
 import ReactMarkdown from 'react-markdown'
 
 interface DietGeneratorProps {
@@ -24,6 +26,7 @@ export function DietGenerator({ data, token }: DietGeneratorProps) {
     isError,
     cancel,
   } = useGeneratePlanMutation(token)
+  const router = useRouter()
 
   function handleGenerate() {
     if (isStreaming) {
@@ -33,6 +36,12 @@ export function DietGenerator({ data, token }: DietGeneratorProps) {
 
     generatePlan(data)
   }
+
+  useEffect(() => {
+    if (!isError && !isStreaming && !isSaving && output) {
+      router.refresh()
+    }
+  }, [isError, router, isStreaming, isSaving, output])
 
   return (
     <div className="flex items-center justify-center">
