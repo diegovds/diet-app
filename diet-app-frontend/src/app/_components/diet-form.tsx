@@ -25,9 +25,11 @@ import {
 import { useUpdateUserMutation } from '@/hooks/use-update-user-mutation'
 import { DietData, DietDataSchema } from '@/types/diet-data'
 import { zodResolver } from '@hookform/resolvers/zod'
+import { useRouter } from 'next/navigation'
 import { useForm } from 'react-hook-form'
 
 export function DietForm({ token }: { token: string }) {
+  const router = useRouter()
   const form = useForm<DietData>({
     resolver: zodResolver(DietDataSchema),
     defaultValues: {
@@ -45,6 +47,7 @@ export function DietForm({ token }: { token: string }) {
 
   const onSubmit = (userInfo: DietData) => {
     mutate(userInfo)
+    router.refresh()
   }
 
   return (
