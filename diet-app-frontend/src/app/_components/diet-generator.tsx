@@ -17,6 +17,8 @@ export function DietGenerator({ data, token }: DietGeneratorProps) {
   const [output, setOutput] = useState('')
   const [isStreaming, setIsStreaming] = useState(false)
   // adicionar verificaçoes de loading e error
+  // verificar se já tem um plano salvo e mostrar ele ou permitir gerar caso não tenha,
+  // posteriormente add a fução de atualizar plano
   const { mutate, isPending, isError, error, isSuccess } =
     useInsertPlanMutation(token)
 
