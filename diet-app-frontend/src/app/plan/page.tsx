@@ -1,6 +1,7 @@
 import { getAuthState } from '@/actions/get-auth-state'
 import { getGetPlan, GetGetPlan200, getUser, GetUser200 } from '@/http/api'
 import { redirect } from 'next/navigation'
+import ReactMarkdown from 'react-markdown'
 import { DietForm } from '../_components/diet-form'
 import { DietGenerator } from '../_components/diet-generator'
 
@@ -62,6 +63,29 @@ export default async function PlanPage() {
       {/* Exibe o gerador se todos os dados estão completos */}
       {normalizedUser && !plan && (
         <DietGenerator data={normalizedUser} token={token} />
+      )}
+
+      {plan && (
+        <div className="rounded-lg bg-gray-100 p-4 shadow-md">
+          <ReactMarkdown
+            components={{
+              h2: ({ node, ...props }) => (
+                <h2
+                  className="my-1 text-xl font-bold text-green-600"
+                  {...props}
+                />
+              ),
+              h1: ({ node, ...props }) => (
+                <h1
+                  className="mb-1 text-2xl font-bold text-zinc-900"
+                  {...props}
+                />
+              ),
+            }}
+          >
+            {plan.content}
+          </ReactMarkdown>
+        </div>
       )}
     </div>
   )
