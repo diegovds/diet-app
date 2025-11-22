@@ -15,14 +15,13 @@ interface DietGeneratorProps {
 }
 
 export function DietGenerator({ data, token }: DietGeneratorProps) {
-  // posteriormente add a fução de atualizar plano
-
   const {
     mutate: generatePlan,
     output,
     isStreaming,
-    isSaving,
     isError,
+    savingDatabase,
+    errorSavingDatabase,
     cancel,
   } = useGeneratePlanMutation(token)
   const router = useRouter()
@@ -37,10 +36,10 @@ export function DietGenerator({ data, token }: DietGeneratorProps) {
   }
 
   useEffect(() => {
-    if (!isError && !isStreaming && !isSaving && output) {
+    if (savingDatabase) {
       router.refresh()
     }
-  }, [isError, router, isStreaming, isSaving, output])
+  }, [router, savingDatabase])
 
   return (
     <div className="flex items-center justify-center">
