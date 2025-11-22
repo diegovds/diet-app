@@ -42,7 +42,7 @@ export function DietGenerator({ data, token }: DietGeneratorProps) {
   }, [router, savingDatabase])
 
   return (
-    <Card className="w-full border-0 p-5">
+    <Card className="w-full border-0 p-6">
       <div className="flex items-center justify-between gap-4">
         <h1>Olá, {data.name}. Clique no botão para gerar a sua dieta.</h1>
         <Button
