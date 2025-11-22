@@ -28,7 +28,7 @@ export default async function RootLayout({
         <QueryClientContext>
           <StoreHydration token={token} />
           <div className="flex min-h-dvh flex-col">
-            <main className="mx-auto flex w-full max-w-7xl flex-1 items-center justify-center px-5 py-12">
+            <main className="mx-auto flex w-full max-w-7xl flex-1 items-center justify-center p-4 md:p-0 md:px-5 md:py-12">
               {children}
             </main>
           </div>
