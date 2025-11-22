@@ -3,6 +3,7 @@ import { getUser, GetUser200 } from '@/http/api'
 import { redirect } from 'next/navigation'
 import { DietForm } from '../_components/diet-form'
 import { DietGenerator } from '../_components/diet-generator'
+import { HeaderPlanView } from '../_components/header-plan-view'
 import { PlanView } from '../_components/plan-view'
 
 export default async function PlanPage() {
@@ -45,7 +46,7 @@ export default async function PlanPage() {
       : null
 
   return (
-    <div className="flex w-full items-center justify-center">
+    <div className="flex w-full flex-col items-center justify-center gap-5">
       {userData && !hasAllData && !userData.plan && (
         <DietForm token={token} userData={userData} />
       )}
@@ -54,7 +55,12 @@ export default async function PlanPage() {
         <DietGenerator data={normalizedUser} token={token} />
       )}
 
-      {userData && userData.plan && <PlanView plan={userData.plan.content} />}
+      {userData && userData.plan && (
+        <div className="space-y-5">
+          <HeaderPlanView username={userData.name} />
+          <PlanView plan={userData.plan.content} />
+        </div>
+      )}
     </div>
   )
 }
