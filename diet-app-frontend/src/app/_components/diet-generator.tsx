@@ -42,48 +42,47 @@ export function DietGenerator({ data, token }: DietGeneratorProps) {
   }, [router, savingDatabase])
 
   return (
-    <div className="flex items-center justify-center">
-      <Card className="w-full max-w-4xl border-0 p-5">
-        <div className="flex justify-center gap-4">
-          <Button
-            className="cursor-pointer gap-2"
-            size="lg"
-            onClick={handleGenerate}
-          >
-            {isStreaming ? (
-              <Loader className="animate-spin" />
-            ) : (
-              <Sparkles className="h-6 w-6" />
-            )}
-            {isStreaming ? 'Parar dieta' : 'Gerar dieta'}
-          </Button>
-        </div>
+    <Card className="w-full border-0 p-5">
+      <div className="flex items-center justify-between gap-4">
+        <h1>Olá, {data.name}. Clique no botão para gerar a sua dieta.</h1>
+        <Button
+          className="cursor-pointer gap-2"
+          size="lg"
+          onClick={handleGenerate}
+        >
+          {isStreaming ? (
+            <Loader className="animate-spin" />
+          ) : (
+            <Sparkles className="h-6 w-6" />
+          )}
+          {isStreaming ? 'Parar dieta' : 'Gerar dieta'}
+        </Button>
+      </div>
 
-        {output && (
-          <div className="bg-card border-border max-h-[500px] overflow-y-auto rounded-lg border p-6">
-            <div className="prose prose-sm max-w-none">
-              <ReactMarkdown
-                components={{
-                  h2: (props) => (
-                    <h2
-                      className="my-1 text-xl font-bold text-green-600"
-                      {...props}
-                    />
-                  ),
-                  h1: (props) => (
-                    <h1
-                      className="mb-1 text-2xl font-bold text-zinc-900"
-                      {...props}
-                    />
-                  ),
-                }}
-              >
-                {output}
-              </ReactMarkdown>
-            </div>
+      {output && (
+        <div className="bg-card border-border max-h-[500px] overflow-y-auto rounded-lg border p-6">
+          <div className="max-w-none">
+            <ReactMarkdown
+              components={{
+                h2: (props) => (
+                  <h2
+                    className="my-1 text-xl font-bold text-green-600"
+                    {...props}
+                  />
+                ),
+                h1: (props) => (
+                  <h1
+                    className="mb-1 text-2xl font-bold text-zinc-900"
+                    {...props}
+                  />
+                ),
+              }}
+            >
+              {output}
+            </ReactMarkdown>
           </div>
-        )}
-      </Card>
-    </div>
+        </div>
+      )}
+    </Card>
   )
 }
