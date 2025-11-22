@@ -20,7 +20,7 @@ export function HeaderPlanView({ username }: PlanViewProps) {
   }
 
   return (
-    <div className="flex items-center justify-between rounded-lg bg-white p-4 shadow">
+    <div className="flex items-center justify-between rounded-lg bg-white p-6 shadow">
       <h1>Olá, {username}</h1>
       <Button onClick={handleClick}>Sair</Button>
     </div>
