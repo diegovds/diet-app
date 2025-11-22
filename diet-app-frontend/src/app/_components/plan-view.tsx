@@ -6,7 +6,7 @@ interface PlanViewProps {
 
 export function PlanView({ plan }: PlanViewProps) {
   return (
-    <div className="rounded-lg bg-white p-4 shadow">
+    <div className="rounded-lg bg-white p-6 shadow">
       <ReactMarkdown
         components={{
           h2: (props) => (
