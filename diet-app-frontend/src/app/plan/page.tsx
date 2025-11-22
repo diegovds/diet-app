@@ -56,7 +56,7 @@ export default async function PlanPage() {
       )}
 
       {userData && userData.plan && (
-        <div className="space-y-5">
+        <div className="w-full space-y-5">
           <HeaderPlanView username={userData.name} />
           <PlanView plan={userData.plan.content} />
         </div>
