@@ -3,7 +3,11 @@ import z from 'zod'
 import { generateDietPlan } from '../agent'
 import { DietPlanRequest, DietPlanRequestSchema } from '../schemas/diets'
 import { planResponseSchema } from '../schemas/plans'
-import { getPlan as _getPlan, insertPlan } from '../services/plans'
+import {
+  deletePlan as _deletePlan,
+  getPlan as _getPlan,
+  insertPlan,
+} from '../services/plans'
 
 export const plan: FastifyPluginAsyncZod = async (app) => {
   app.post<{ Body: DietPlanRequest }>(
@@ -133,6 +137,45 @@ export const getPlan: FastifyPluginAsyncZod = async (app) => {
         request.log.error(err)
         return reply.status(400).send({
           error: 'Erro ao pegar plano alimentar.',
+          details: err,
+        })
+      }
+    },
+  )
+}
+
+export const deletePlan: FastifyPluginAsyncZod = async (app) => {
+  app.delete(
+    '/deletePlan',
+    {
+      preHandler: [app.authenticate],
+      schema: {
+        tags: ['Diet Plan'],
+        security: [{ bearerAuth: [] }],
+        summary: 'Deleta o plano alimentar do usuário',
+        description: 'Deleta o plano alimentar de um usuário.',
+        response: {
+          200: z.object({
+            planId: z.uuid(),
+          }),
+          400: z.object({
+            error: z.string(),
+            details: z.any(),
+          }),
+        },
+      },
+    },
+    async (request, reply) => {
+      const userId = request.user.sub
+
+      try {
+        const planId = await _deletePlan(userId)
+
+        return reply.send({ planId })
+      } catch (err) {
+        request.log.error(err)
+        return reply.status(400).send({
+          error: 'Erro ao deletar plano alimentar.',
           details: err,
         })
       }

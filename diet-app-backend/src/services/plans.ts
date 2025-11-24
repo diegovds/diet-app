@@ -9,6 +9,15 @@ export async function insertPlan(plan: Plan) {
   return newPlan.id
 }
 
+export async function deletePlan(userId: string) {
+  const [newPlan] = await db
+    .delete(plans)
+    .where(eq(plans.userId, userId))
+    .returning()
+
+  return newPlan.id
+}
+
 export async function getPlan(userId: string) {
   const [plan] = await db.select().from(plans).where(eq(plans.userId, userId))
 
