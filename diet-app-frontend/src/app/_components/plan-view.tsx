@@ -6,8 +6,8 @@ interface PlanViewProps {
 
 export function PlanView({ plan }: PlanViewProps) {
   return (
-    <div className="rounded-lg bg-white p-4 shadow md:p-6">
-      <div className="bg-card border-border max-h-[500px] overflow-y-auto rounded-lg border p-4 md:p-6">
+    <div className="rounded-lg bg-white p-4 shadow">
+      <div className="bg-card border-border max-h-[500px] overflow-y-auto rounded-lg border p-4">
         <div className="max-w-none">
           <ReactMarkdown
             components={{

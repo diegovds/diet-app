@@ -30,7 +30,7 @@ export default async function RootLayout({
           <StoreHydration token={token} />
           <div className="flex min-h-dvh flex-col">
             <Navbar />
-            <main className="mx-auto flex w-full max-w-7xl flex-1 p-4 md:p-0 md:px-5 md:py-12">
+            <main className="mx-auto flex w-full max-w-7xl flex-1 p-4">
               {children}
             </main>
           </div>

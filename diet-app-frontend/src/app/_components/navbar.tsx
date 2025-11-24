@@ -17,7 +17,7 @@ export function Navbar() {
 
   return (
     <nav className="w-full bg-white shadow">
-      <div className="mx-auto flex w-full max-w-7xl items-center justify-between p-4 md:p-0 md:px-5 md:py-4">
+      <div className="mx-auto flex w-full max-w-7xl items-center justify-between p-4">
         <span className="text-lg font-bold">Diet App</span>
         {token && <Button onClick={handleClick}>Sair</Button>}
       </div>
