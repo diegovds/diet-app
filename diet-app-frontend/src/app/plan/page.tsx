@@ -46,9 +46,11 @@ export default async function PlanPage() {
       : null
 
   return (
-    <div className="flex w-full flex-col items-center justify-center gap-5">
+    <div className="w-full">
       {userData && !hasAllData && !userData.plan && (
-        <DietForm token={token} userData={userData} />
+        <div className="flex justify-center">
+          <DietForm token={token} userData={userData} />
+        </div>
       )}
 
       {normalizedUser && userData && !userData.plan && (
