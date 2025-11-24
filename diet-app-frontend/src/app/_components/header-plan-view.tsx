@@ -1,11 +1,14 @@
+import { GetUser200 } from '@/http/api'
+
 interface PlanViewProps {
-  username: string
+  token: string
+  userData: GetUser200
 }
 
-export function HeaderPlanView({ username }: PlanViewProps) {
+export function HeaderPlanView({ userData, token }: PlanViewProps) {
   return (
-    <div className="flex items-center justify-between rounded-lg bg-white p-4 shadow md:p-6">
-      <h1>Olá, {username}</h1>
+    <div className="">
+      <h1>Olá, {userData.name}</h1>
     </div>
   )
 }
