@@ -3,6 +3,7 @@ import { QueryClientContext } from '@/providers/query-client'
 import { StoreHydration } from '@/providers/store-hydration'
 import type { Metadata } from 'next'
 import { Nunito_Sans } from 'next/font/google'
+import { Navbar } from './_components/navbar'
 import './globals.css'
 
 const nunitoSans = Nunito_Sans({
@@ -28,7 +29,8 @@ export default async function RootLayout({
         <QueryClientContext>
           <StoreHydration token={token} />
           <div className="flex min-h-dvh flex-col">
-            <main className="mx-auto flex w-full max-w-7xl flex-1 items-center justify-center p-4 md:p-0 md:px-5 md:py-12">
+            <Navbar />
+            <main className="mx-auto flex w-full max-w-7xl flex-1 p-4 md:p-0 md:px-5 md:py-12">
               {children}
             </main>
           </div>
