@@ -260,6 +260,16 @@ export type GetGetPlan400 = {
   details: unknown
 }
 
+export type DeleteDeletePlan200 = {
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  planId: string
+}
+
+export type DeleteDeletePlan400 = {
+  error: string
+  details: unknown
+}
+
 export const getGetUrl = () => {
   return `http://localhost:3333/`
 }
@@ -379,5 +389,22 @@ export const getGetPlan = async (
   return customFetch<GetGetPlan200>(getGetGetPlanUrl(), {
     ...options,
     method: 'GET',
+  })
+}
+
+/**
+ * Deleta o plano alimentar de um usuário.
+ * @summary Deleta o plano alimentar do usuário
+ */
+export const getDeleteDeletePlanUrl = () => {
+  return `http://localhost:3333/deletePlan`
+}
+
+export const deleteDeletePlan = async (
+  options?: RequestInit,
+): Promise<DeleteDeletePlan200> => {
+  return customFetch<DeleteDeletePlan200>(getDeleteDeletePlanUrl(), {
+    ...options,
+    method: 'DELETE',
   })
 }
