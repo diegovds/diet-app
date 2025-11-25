@@ -22,6 +22,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select'
+import { useDeletePlanMutation } from '@/hooks/use-delete-plan-mutation'
 import { useUpdateUserMutation } from '@/hooks/use-update-user-mutation'
 import { GetUser200 } from '@/http/api'
 import { DietData, DietDataSchema } from '@/types/diet-data'
@@ -32,9 +33,10 @@ import { useForm } from 'react-hook-form'
 interface DietFormProps {
   token: string
   userData: GetUser200
+  update?: boolean
 }
 
-export function DietForm({ userData, token }: DietFormProps) {
+export function DietForm({ userData, token, update }: DietFormProps) {
   const router = useRouter()
   const form = useForm<DietData>({
     resolver: zodResolver(DietDataSchema),
@@ -52,9 +54,14 @@ export function DietForm({ userData, token }: DietFormProps) {
   const { mutate, isPending, isError, error, isSuccess } =
     useUpdateUserMutation(token)
 
+  const { mutate: deletePLan } = useDeletePlanMutation(token)
+
   const onSubmit = (userInfo: DietData) => {
     mutate(userInfo, {
       onSuccess: () => {
+        if (update && userData.plan) {
+          deletePLan()
+        }
         router.refresh()
       },
     })
@@ -68,9 +75,26 @@ export function DietForm({ userData, token }: DietFormProps) {
             <CardHeader className="p-0">
               <CardTitle>Dados pessoais</CardTitle>
               <CardDescription>
-                Insira seus dados adicionais para concluir o cadastro
+                {update
+                  ? 'Atualize suas informações'
+                  : 'Insira seus dados adicionais para concluir o cadastro'}
               </CardDescription>
             </CardHeader>
+
+            {update && (
+              <FormField
+                control={form.control}
+                name="name"
+                render={({ field }) => (
+                  <FormItem className="grid gap-2">
+                    <FormLabel>Nome</FormLabel>
+                    <FormControl>
+                      <Input placeholder="Digite seu nome" {...field} />
+                    </FormControl>
+                  </FormItem>
+                )}
+              />
+            )}
 
             <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
               <FormField
@@ -223,7 +247,13 @@ export function DietForm({ userData, token }: DietFormProps) {
               className="mt-4 w-full cursor-pointer transition-all duration-300 hover:opacity-90"
               disabled={isPending}
             >
-              {isPending ? 'Salvando...' : 'Salvar alterações'}
+              {update
+                ? isPending
+                  ? 'Atualizando...'
+                  : 'Atualizar informações'
+                : isPending
+                  ? 'Salvando...'
+                  : 'Salvar alterações'}
             </Button>
           </form>
         </Form>
@@ -232,12 +262,6 @@ export function DietForm({ userData, token }: DietFormProps) {
             {error instanceof Error
               ? error.message
               : 'Erro ao atualizar os dados. Tente novamente.'}
-          </p>
-        )}
-
-        {isSuccess && (
-          <p className="mt-2 text-sm text-green-600">
-            Dados atualizados com sucesso!
           </p>
         )}
       </div>
