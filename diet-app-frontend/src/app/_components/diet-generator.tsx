@@ -7,7 +7,7 @@ import { DietData } from '@/types/diet-data'
 import { Loader, Sparkles } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 import { useEffect } from 'react'
-import ReactMarkdown from 'react-markdown'
+import { PlanView } from './plan-view'
 
 interface DietGeneratorProps {
   data: DietData
@@ -42,7 +42,7 @@ export function DietGenerator({ data, token }: DietGeneratorProps) {
   }, [router, savingDatabase])
 
   return (
-    <Card className="w-full border-0 p-6">
+    <Card className="w-full border-0 bg-transparent p-0 shadow-none">
       <div className="flex items-center justify-between gap-4">
         <h1>Olá, {data.name}. Clique no botão para gerar a sua dieta.</h1>
         <Button
@@ -59,30 +59,7 @@ export function DietGenerator({ data, token }: DietGeneratorProps) {
         </Button>
       </div>
 
-      {output && (
-        <div className="bg-card border-border max-h-[500px] overflow-y-auto rounded-lg border p-6">
-          <div className="max-w-none">
-            <ReactMarkdown
-              components={{
-                h2: (props) => (
-                  <h2
-                    className="my-1 text-xl font-bold text-green-600"
-                    {...props}
-                  />
-                ),
-                h1: (props) => (
-                  <h1
-                    className="mb-1 text-2xl font-bold text-zinc-900"
-                    {...props}
-                  />
-                ),
-              }}
-            >
-              {output}
-            </ReactMarkdown>
-          </div>
-        </div>
-      )}
+      {output && <PlanView plan={output} />}
     </Card>
   )
 }
