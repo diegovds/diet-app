@@ -29,7 +29,7 @@ export default async function RootLayout({
         <QueryClientContext>
           <StoreHydration token={token} />
           <div className="flex min-h-dvh flex-col">
-            <Navbar />
+            <Navbar token={token} />
             <main className="mx-auto flex w-full max-w-7xl flex-1 p-4">
               {children}
             </main>
