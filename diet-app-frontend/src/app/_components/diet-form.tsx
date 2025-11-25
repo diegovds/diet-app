@@ -28,15 +28,22 @@ import { GetUser200 } from '@/http/api'
 import { DietData, DietDataSchema } from '@/types/diet-data'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useRouter } from 'next/navigation'
+import { useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 
 interface DietFormProps {
   token: string
   userData: GetUser200
   update?: boolean
+  onPendingPlanChange?: (pending: boolean) => void
 }
 
-export function DietForm({ userData, token, update }: DietFormProps) {
+export function DietForm({
+  userData,
+  token,
+  update,
+  onPendingPlanChange,
+}: DietFormProps) {
   const router = useRouter()
   const form = useForm<DietData>({
     resolver: zodResolver(DietDataSchema),
@@ -54,7 +61,12 @@ export function DietForm({ userData, token, update }: DietFormProps) {
   const { mutate, isPending, isError, error, isSuccess } =
     useUpdateUserMutation(token)
 
-  const { mutate: deletePLan } = useDeletePlanMutation(token)
+  const { mutate: deletePLan, isPending: isPendingPlan } =
+    useDeletePlanMutation(token)
+
+  useEffect(() => {
+    onPendingPlanChange?.(isPendingPlan)
+  }, [isPendingPlan, onPendingPlanChange])
 
   const onSubmit = (userInfo: DietData) => {
     mutate(userInfo, {
@@ -245,7 +257,7 @@ export function DietForm({ userData, token, update }: DietFormProps) {
 
             <Button
               className="mt-4 w-full cursor-pointer transition-all duration-300 hover:opacity-90"
-              disabled={isPending}
+              disabled={isPending || isPendingPlan}
             >
               {update
                 ? isPending
