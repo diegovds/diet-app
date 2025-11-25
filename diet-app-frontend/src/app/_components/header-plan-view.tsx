@@ -14,6 +14,7 @@ interface PlanViewProps {
 
 export function HeaderPlanView({ userData, token }: PlanViewProps) {
   const [updateData, setUpdateData] = useState(false)
+  const [isPendingPlan, setIsPendingPlan] = useState(false)
   const { mutate, isPending } = useDeletePlanMutation(token)
   const router = useRouter()
 
@@ -28,17 +29,19 @@ export function HeaderPlanView({ userData, token }: PlanViewProps) {
   return (
     <div className="">
       <div className="flex items-center justify-between gap-4">
-        <h1>Olá, {userData.name}</h1>
+        <h1 className="text-2xl">
+          Olá, <strong>{userData.name}</strong>
+        </h1>
         <div className="flex gap-4">
           <Button
             onClick={() => setUpdateData(!updateData)}
-            disabled={isPending}
+            disabled={isPending || isPendingPlan}
           >
             {updateData ? 'Fechar' : 'Atualizar dados'}
           </Button>
           <Button
             onClick={handleDeletePlan}
-            disabled={isPending}
+            disabled={isPending || isPendingPlan}
             variant="destructive"
           >
             Apagar dieta
@@ -47,7 +50,12 @@ export function HeaderPlanView({ userData, token }: PlanViewProps) {
       </div>
       {updateData && (
         <div className="mt-4 flex justify-center">
-          <DietForm token={token} userData={userData} update />
+          <DietForm
+            token={token}
+            userData={userData}
+            update
+            onPendingPlanChange={(value) => setIsPendingPlan(value)}
+          />
         </div>
       )}
     </div>
