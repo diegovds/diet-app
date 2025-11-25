@@ -5,9 +5,13 @@ import { Button } from '@/components/ui/button'
 import { useAuthStore } from '@/store/auth'
 import { useRouter } from 'next/navigation'
 
-export function Navbar() {
+type Props = {
+  token: string | null
+}
+
+export function Navbar({ token }: Props) {
   const router = useRouter()
-  const { clearToken, token } = useAuthStore()
+  const { clearToken } = useAuthStore()
 
   const handleClick = async () => {
     await clearAuthCookie()
