@@ -58,8 +58,7 @@ export function DietForm({
     },
   })
 
-  const { mutate, isPending, isError, error, isSuccess } =
-    useUpdateUserMutation(token)
+  const { mutate, isPending, isError, error } = useUpdateUserMutation(token)
 
   const { mutate: deletePLan, isPending: isPendingPlan } =
     useDeletePlanMutation(token)
