@@ -23,12 +23,14 @@ import { useAuthMutation } from '@/hooks/use-auth-mutation'
 import { useAuthStore } from '@/store/auth'
 import { AuthFormData, signInSchema, signUpSchema } from '@/types/auth'
 import { zodResolver } from '@hookform/resolvers/zod'
+import { useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 
 export function AuthForm() {
   const { setToken } = useAuthStore()
   const [isSignin, setIsSignin] = useState(true)
+  const router = useRouter()
   const form = useForm<AuthFormData>({
     resolver: zodResolver(isSignin ? signInSchema : signUpSchema),
     defaultValues: {
@@ -41,7 +43,11 @@ export function AuthForm() {
   const { mutate, isPending, isError, error, data } = useAuthMutation()
 
   const onSubmit = (data: AuthFormData) => {
-    mutate(data)
+    mutate(data, {
+      onSuccess: () => {
+        router.refresh()
+      },
+    })
   }
 
   useEffect(() => {
