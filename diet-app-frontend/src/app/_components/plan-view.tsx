@@ -5,30 +5,38 @@ interface PlanViewProps {
 }
 
 export function PlanView({ plan }: PlanViewProps) {
+  const parts = plan.split(/(?=## Dia \d+)/g)
+
+  const days = parts.map((p) => p.trim()).filter((p) => p.length > 0)
+
   return (
-    <div className="rounded-lg bg-white p-4 shadow">
-      <div className="bg-card border-border max-h-[500px] overflow-y-auto rounded-lg border p-4">
-        <div className="max-w-none">
+    <div className="grid grid-cols-1 items-center gap-4 md:grid-cols-2">
+      {days.map((day, index) => (
+        <div
+          key={index}
+          className="w-full place-self-start rounded-lg bg-white p-4 shadow"
+        >
           <ReactMarkdown
             components={{
               h2: (props) => (
                 <h2
-                  className="my-1 text-xl font-bold text-green-600"
+                  className="mb-1 text-xl font-semibold text-green-600 md:text-2xl"
                   {...props}
                 />
               ),
-              h1: (props) => (
-                <h1
-                  className="mb-1 text-2xl font-bold text-zinc-900"
-                  {...props}
-                />
+              strong: (props) => (
+                <strong className="font-medium text-zinc-900" {...props} />
               ),
+              ul: (props) => (
+                <ul className="space-y-0.5 text-sm md:text-base" {...props} />
+              ),
+              li: (props) => <li className="text-zinc-500" {...props} />,
             }}
           >
-            {plan}
+            {day}
           </ReactMarkdown>
         </div>
-      </div>
+      ))}
     </div>
   )
 }
