@@ -52,10 +52,10 @@ export function HeaderPlanView({
           <Button
             className="flex-1 md:flex-none"
             onClick={handleDeletePlan}
-            disabled={isPending || isPendingPlan}
+            disabled={isPending || isPendingPlan || updateData}
             variant="destructive"
           >
-            Apagar dieta
+            {isPending ? 'Apagando...' : 'Apagar dieta'}
           </Button>
         </div>
       </div>
