@@ -1,7 +1,6 @@
 'use client'
 
 import { Button } from '@/components/ui/button'
-import { Card } from '@/components/ui/card'
 import { useGeneratePlanMutation } from '@/hooks/use-generate-plan-mutation'
 import { DietData } from '@/types/diet-data'
 import { Loader, Sparkles } from 'lucide-react'
@@ -42,14 +41,13 @@ export function DietGenerator({ data, token }: DietGeneratorProps) {
   }, [router, savingDatabase])
 
   return (
-    <Card className="w-full border-0 bg-transparent p-0 shadow-none">
+    <div className="space-y-5">
       <div className="flex items-center justify-between gap-4">
-        <h1>Olá, {data.name}. Clique no botão para gerar a sua dieta.</h1>
-        <Button
-          className="cursor-pointer gap-2"
-          size="lg"
-          onClick={handleGenerate}
-        >
+        <h1 className="text-2xl">
+          Olá, <strong>{data.name}</strong>. Clique no botão para gerar a sua
+          dieta.
+        </h1>
+        <Button className="cursor-pointer gap-2" onClick={handleGenerate}>
           {isStreaming ? (
             <Loader className="animate-spin" />
           ) : (
@@ -60,6 +58,6 @@ export function DietGenerator({ data, token }: DietGeneratorProps) {
       </div>
 
       {output && <PlanView plan={output} />}
-    </Card>
+    </div>
   )
 }
