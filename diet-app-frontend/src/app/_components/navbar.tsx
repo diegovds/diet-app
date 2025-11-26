@@ -22,7 +22,7 @@ export function Navbar({ token }: Props) {
   return (
     <nav className="w-full bg-white shadow">
       <div className="mx-auto flex w-full max-w-7xl items-center justify-between p-4">
-        <span className="text-lg font-bold">Diet App</span>
+        <span className="text-lg font-bold">DietaGPT</span>
         {token && <Button onClick={handleClick}>Sair</Button>}
       </div>
     </nav>
