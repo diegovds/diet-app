@@ -25,7 +25,12 @@ export function Diet({ token, userData }: DietProps) {
         openChangeCard={openChangeCard}
       />
       {userData.plan && !updateData && (
-        <PlanView plan={userData.plan.content} />
+        <>
+          <h3 className="text-base">
+            Segue abaixo a sua dieta gerada pelo ChatGPT
+          </h3>
+          <PlanView plan={userData.plan.content} />
+        </>
       )}
     </div>
   )
