@@ -66,7 +66,7 @@ export function DietGenerator({ data, token }: DietGeneratorProps) {
               : errorSavingDatabase
                 ? 'Erro ao salvar a dieta no banco de dados'
                 : output
-                  ? 'Aqui está a sua dieta gerada pelo ChatGPT'
+                  ? 'A sua dieta não foi salva, pois a geração foi interrompida'
                   : 'Clique no botão acima para gerar a sua dieta'}
       </h3>
 
