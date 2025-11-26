@@ -4,15 +4,20 @@ import { Button } from '@/components/ui/button'
 import { useDeletePlanMutation } from '@/hooks/use-delete-plan-mutation'
 import { GetUser200 } from '@/http/api'
 import { useRouter } from 'next/navigation'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { DietForm } from './diet-form'
 
 interface PlanViewProps {
   token: string
   userData: GetUser200
+  openChangeCard: (open: boolean) => void
 }
 
-export function HeaderPlanView({ userData, token }: PlanViewProps) {
+export function HeaderPlanView({
+  userData,
+  token,
+  openChangeCard,
+}: PlanViewProps) {
   const [updateData, setUpdateData] = useState(false)
   const [isPendingPlan, setIsPendingPlan] = useState(false)
   const { mutate, isPending } = useDeletePlanMutation(token)
@@ -25,6 +30,10 @@ export function HeaderPlanView({ userData, token }: PlanViewProps) {
       },
     })
   }
+
+  useEffect(() => {
+    openChangeCard(updateData)
+  }, [updateData, openChangeCard])
 
   return (
     <div className="">
