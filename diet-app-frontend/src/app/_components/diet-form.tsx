@@ -58,7 +58,8 @@ export function DietForm({
     },
   })
 
-  const { mutate, isPending, isError, error } = useUpdateUserMutation(token)
+  const { mutate, isSuccess, isPending, isError, error } =
+    useUpdateUserMutation(token)
 
   const { mutate: deletePLan, isPending: isPendingPlan } =
     useDeletePlanMutation(token)
@@ -259,10 +260,10 @@ export function DietForm({
               disabled={isPending || isPendingPlan}
             >
               {update
-                ? isPending
+                ? isPending || isSuccess
                   ? 'Atualizando...'
                   : 'Atualizar informações'
-                : isPending
+                : isPending || isSuccess
                   ? 'Salvando...'
                   : 'Salvar alterações'}
             </Button>
