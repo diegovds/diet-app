@@ -46,7 +46,7 @@ export function HeaderPlanView({
             onClick={() => setUpdateData(!updateData)}
             disabled={isPending || isPendingPlan}
           >
-            {updateData ? 'Fechar' : 'Atualizar dados'}
+            {updateData ? 'Mostrar dieta' : 'Atualizar dados'}
           </Button>
           <Button
             onClick={handleDeletePlan}
