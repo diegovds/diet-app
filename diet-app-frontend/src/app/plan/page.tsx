@@ -1,10 +1,9 @@
 import { getAuthState } from '@/actions/get-auth-state'
 import { getUser, GetUser200 } from '@/http/api'
 import { redirect } from 'next/navigation'
+import { Diet } from '../_components/diet'
 import { DietForm } from '../_components/diet-form'
 import { DietGenerator } from '../_components/diet-generator'
-import { HeaderPlanView } from '../_components/header-plan-view'
-import { PlanView } from '../_components/plan-view'
 
 export default async function PlanPage() {
   const { token } = await getAuthState()
@@ -57,12 +56,7 @@ export default async function PlanPage() {
         <DietGenerator data={normalizedUser} token={token} />
       )}
 
-      {userData && userData.plan && (
-        <div className="w-full space-y-5">
-          <HeaderPlanView token={token} userData={userData} />
-          <PlanView plan={userData.plan.content} />
-        </div>
-      )}
+      {userData && userData.plan && <Diet token={token} userData={userData} />}
     </div>
   )
 }
