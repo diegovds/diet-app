@@ -40,7 +40,8 @@ export function AuthForm() {
     },
   })
 
-  const { mutate, isPending, isError, error, data } = useAuthMutation()
+  const { mutate, isSuccess, isPending, isError, error, data } =
+    useAuthMutation()
 
   const onSubmit = (data: AuthFormData) => {
     mutate(data, {
@@ -152,7 +153,11 @@ export function AuthForm() {
             )}
 
             <Button type="submit" className="w-full" disabled={isPending}>
-              {isPending ? 'Enviando...' : isSignin ? 'Entrar' : 'Cadastrar'}
+              {isPending || isSuccess
+                ? 'Enviando...'
+                : isSignin
+                  ? 'Entrar'
+                  : 'Cadastrar'}
             </Button>
           </form>
         </Form>
