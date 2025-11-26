@@ -44,8 +44,7 @@ export function DietGenerator({ data, token }: DietGeneratorProps) {
     <div className="space-y-5">
       <div className="flex items-center justify-between gap-4">
         <h1 className="text-2xl">
-          Olá, <strong>{data.name}</strong>. Clique no botão para gerar a sua
-          dieta.
+          Olá, <strong>{data.name}</strong>
         </h1>
         <Button className="cursor-pointer gap-2" onClick={handleGenerate}>
           {isStreaming ? (
@@ -56,6 +55,20 @@ export function DietGenerator({ data, token }: DietGeneratorProps) {
           {isStreaming ? 'Parar dieta' : 'Gerar dieta'}
         </Button>
       </div>
+
+      <h3 className="flex items-center gap-0.5 text-base">
+        {isStreaming
+          ? 'Gerando sua dieta...'
+          : isError
+            ? 'Ocorreu um erro ao gerar a dieta'
+            : savingDatabase
+              ? 'Salvando dieta no banco de dados...'
+              : errorSavingDatabase
+                ? 'Erro ao salvar a dieta no banco de dados'
+                : output
+                  ? 'Aqui está a sua dieta gerada pelo ChatGPT'
+                  : 'Clique no botão acima para gerar a sua dieta'}
+      </h3>
 
       {output && <PlanView plan={output} />}
     </div>
