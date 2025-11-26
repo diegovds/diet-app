@@ -37,18 +37,20 @@ export function HeaderPlanView({
 
   return (
     <div className="">
-      <div className="flex items-center justify-between gap-4">
+      <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
         <h1 className="text-2xl">
           Olá, <strong>{userData.name}</strong>
         </h1>
         <div className="flex gap-4">
           <Button
+            className="flex-1 md:flex-none"
             onClick={() => setUpdateData(!updateData)}
             disabled={isPending || isPendingPlan}
           >
             {updateData ? 'Mostrar dieta' : 'Atualizar dados'}
           </Button>
           <Button
+            className="flex-1 md:flex-none"
             onClick={handleDeletePlan}
             disabled={isPending || isPendingPlan}
             variant="destructive"
