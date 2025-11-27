@@ -72,9 +72,14 @@ export function DietForm({
     mutate(userInfo, {
       onSuccess: () => {
         if (update && userData.plan) {
-          deletePLan()
+          deletePLan(undefined, {
+            onSuccess: () => {
+              router.refresh()
+            },
+          })
+        } else {
+          router.refresh()
         }
-        router.refresh()
       },
     })
   }
