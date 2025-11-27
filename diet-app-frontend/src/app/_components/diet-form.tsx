@@ -58,6 +58,15 @@ export function DietForm({
     },
   })
 
+  const allFieldsFilled =
+    !!form.watch('name') &&
+    !!form.watch('age') &&
+    !!form.watch('weight') &&
+    !!form.watch('height') &&
+    !!form.watch('activityLevel') &&
+    !!form.watch('genre') &&
+    !!form.watch('goal')
+
   const { mutate, isSuccess, isPending, isError, error } =
     useUpdateUserMutation(token)
 
@@ -262,7 +271,12 @@ export function DietForm({
 
             <Button
               className="mt-4 w-full cursor-pointer transition-all duration-300 hover:opacity-90"
-              disabled={isPending || isPendingPlan || isSuccess}
+              disabled={
+                isPending ||
+                isPendingPlan ||
+                isSuccess ||
+                (update ? !form.formState.isDirty : !allFieldsFilled)
+              }
             >
               {update
                 ? isPending || isSuccess
