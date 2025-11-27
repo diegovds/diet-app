@@ -23,7 +23,6 @@
     "fastify-type-provider-zod": "^6.1.0",
     "openai": "^6.7.0",
     "postgres": "^3.4.7",
-    "tsup": "^8.5.1",
     "zod": "^4.1.12"
   },
   "devDependencies": {
@@ -31,6 +30,7 @@
     "@types/node": "^24.9.2",
     "drizzle-kit": "^0.31.6",
     "eslint": "^8.57.1",
+    "tsup": "^8.5.1",
     "tsx": "^4.20.6",
     "typescript": "^5.9.3"
   }
