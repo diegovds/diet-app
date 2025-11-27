@@ -257,7 +257,7 @@ export function DietForm({
 
             <Button
               className="mt-4 w-full cursor-pointer transition-all duration-300 hover:opacity-90"
-              disabled={isPending || isPendingPlan}
+              disabled={isPending || isPendingPlan || isSuccess}
             >
               {update
                 ? isPending || isSuccess

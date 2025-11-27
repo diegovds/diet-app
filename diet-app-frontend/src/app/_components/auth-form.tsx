@@ -152,7 +152,11 @@ export function AuthForm() {
               />
             )}
 
-            <Button type="submit" className="w-full" disabled={isPending}>
+            <Button
+              type="submit"
+              className="w-full"
+              disabled={isPending || isSuccess}
+            >
               {isPending || isSuccess
                 ? 'Enviando...'
                 : isSignin
