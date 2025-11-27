@@ -6,10 +6,12 @@ export const customFetch = async <T>(
 ): Promise<T> => {
   const baseUrl = env.NEXT_PUBLIC_BACKEND_URL
 
-  const url =
+  const path =
     typeof input === 'string'
-      ? `${baseUrl}${input}`
-      : `${baseUrl}${input.toString()}`
+      ? input.replace(/^\//, '')
+      : input.toString().replace(/^\//, '')
+
+  const url = `${baseUrl}/${path}`
 
   const response = await fetch(url, config)
 
