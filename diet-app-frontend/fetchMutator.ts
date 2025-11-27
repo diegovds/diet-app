@@ -1,7 +1,16 @@
+import { env } from '@/env'
+
 export const customFetch = async <T>(
-  url: string,
+  input: RequestInfo,
   config: RequestInit,
 ): Promise<T> => {
+  const baseUrl = env.NEXT_PUBLIC_BACKEND_URL
+
+  const url =
+    typeof input === 'string'
+      ? `${baseUrl}${input}`
+      : `${baseUrl}${input.toString()}`
+
   const response = await fetch(url, config)
 
   if (!response.ok) {

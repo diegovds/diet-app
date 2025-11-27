@@ -271,7 +271,7 @@ export type DeleteDeletePlan400 = {
 }
 
 export const getGetUrl = () => {
-  return `http://localhost:3333/`
+  return `/`
 }
 
 export const get = async (options?: RequestInit): Promise<void> => {
@@ -286,7 +286,7 @@ export const get = async (options?: RequestInit): Promise<void> => {
  * @summary Gera um plano alimentar personalizado
  */
 export const getPostGenPlanUrl = () => {
-  return `http://localhost:3333/genPlan`
+  return `/genPlan`
 }
 
 export const postGenPlan = async (
@@ -306,7 +306,7 @@ export const postGenPlan = async (
  * @summary Cria uma nova conta ou autentica um usuário existente
  */
 export const getPostAuthUrl = () => {
-  return `http://localhost:3333/auth`
+  return `/auth`
 }
 
 export const postAuth = async (
@@ -326,7 +326,7 @@ export const postAuth = async (
  * @summary Atualiza os dados do usuário autenticado
  */
 export const getPatchUserUrl = () => {
-  return `http://localhost:3333/user`
+  return `/user`
 }
 
 export const patchUser = async (
@@ -345,7 +345,7 @@ export const patchUser = async (
  * @summary Retorna os dados do usuário autenticado
  */
 export const getGetUserUrl = () => {
-  return `http://localhost:3333/user`
+  return `/user`
 }
 
 export const getUser = async (options?: RequestInit): Promise<GetUser200> => {
@@ -360,7 +360,7 @@ export const getUser = async (options?: RequestInit): Promise<GetUser200> => {
  * @summary Cria o plano alimentar do usuário
  */
 export const getPostPostPlanUrl = () => {
-  return `http://localhost:3333/postPlan`
+  return `/postPlan`
 }
 
 export const postPostPlan = async (
@@ -380,7 +380,7 @@ export const postPostPlan = async (
  * @summary Pega o plano alimentar do usuário
  */
 export const getGetGetPlanUrl = () => {
-  return `http://localhost:3333/getPlan`
+  return `/getPlan`
 }
 
 export const getGetPlan = async (
@@ -397,7 +397,7 @@ export const getGetPlan = async (
  * @summary Deleta o plano alimentar do usuário
  */
 export const getDeleteDeletePlanUrl = () => {
-  return `http://localhost:3333/deletePlan`
+  return `/deletePlan`
 }
 
 export const deleteDeletePlan = async (

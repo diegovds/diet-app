@@ -8,8 +8,6 @@ export default defineConfig({
       client: 'fetch',
       httpClient: 'fetch',
       clean: true,
-      baseUrl: 'http://localhost:3333',
-
       override: {
         mutator: {
           path: './fetchMutator.ts',
