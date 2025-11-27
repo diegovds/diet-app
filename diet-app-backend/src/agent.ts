@@ -1,5 +1,6 @@
 import fs from 'fs'
 import OpenAI from 'openai'
+import path from 'path'
 import { env } from './env'
 import {
   buildDocsSystemPrompt,
@@ -15,7 +16,20 @@ const client = new OpenAI({
 })
 
 export async function* generateDietPlan(input: DietPlanRequest) {
-  const guidelines = fs.readFileSync('knowledge/guidelines.md', 'utf-8')
+  const guidelinePath = path.join(__dirname, '..', 'knowledge', 'guidelines.md')
+
+  let guidelines = ''
+  try {
+    guidelines = fs.readFileSync(guidelinePath, 'utf8')
+  } catch (err) {
+    console.error(
+      'Failed to load guidelines.md:',
+      guidelinePath,
+      (err as Error).message,
+    )
+
+    throw err
+  }
 
   const stream = await client.chat.completions.create({
     model: 'gpt-4o-mini',
