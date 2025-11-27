@@ -6,6 +6,8 @@ import { Diet } from '../_components/diet'
 import { DietForm } from '../_components/diet-form'
 import { DietGenerator } from '../_components/diet-generator'
 
+export const dynamic = 'force-dynamic'
+
 export const metadata: Metadata = {
   title: 'Minha dieta',
 }
@@ -22,6 +24,7 @@ export default async function PlanPage() {
       headers: {
         Authorization: `Bearer ${token}`,
       },
+      cache: 'no-store',
     })
   } catch {
     redirect('/')
