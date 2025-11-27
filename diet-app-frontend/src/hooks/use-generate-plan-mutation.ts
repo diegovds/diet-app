@@ -1,3 +1,4 @@
+import { env } from '@/env'
 import { PostGenPlanBody } from '@/http/api'
 import { useMutation } from '@tanstack/react-query'
 import { useRef, useState } from 'react'
@@ -14,6 +15,7 @@ export function useGeneratePlanMutation(token: string) {
 
   const mutation = useMutation({
     mutationFn: async (data: PostGenPlanBody) => {
+      const baseUrl = env.NEXT_PUBLIC_BACKEND_URL
       const controller = new AbortController()
       controllerRef.current = controller
 
@@ -21,7 +23,7 @@ export function useGeneratePlanMutation(token: string) {
       setIsStreaming(true)
 
       try {
-        const response = await fetch('http://localhost:3333/genPlan', {
+        const response = await fetch(`${baseUrl}/genPlan`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
