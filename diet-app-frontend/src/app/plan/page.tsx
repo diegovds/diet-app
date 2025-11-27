@@ -22,6 +22,7 @@ export default async function PlanPage() {
       headers: {
         Authorization: `Bearer ${token}`,
       },
+      cache: 'no-store',
     })
   } catch {
     redirect('/')
