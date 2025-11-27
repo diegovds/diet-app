@@ -1,9 +1,14 @@
 import { getAuthState } from '@/actions/get-auth-state'
 import { getUser, GetUser200 } from '@/http/api'
+import { Metadata } from 'next'
 import { redirect } from 'next/navigation'
 import { Diet } from '../_components/diet'
 import { DietForm } from '../_components/diet-form'
 import { DietGenerator } from '../_components/diet-generator'
+
+export const metadata: Metadata = {
+  title: 'Minha dieta',
+}
 
 export default async function PlanPage() {
   const { token } = await getAuthState()

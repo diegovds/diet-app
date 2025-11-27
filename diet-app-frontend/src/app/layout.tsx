@@ -1,4 +1,5 @@
 import { getAuthState } from '@/actions/get-auth-state'
+import { env } from '@/env'
 import { QueryClientContext } from '@/providers/query-client'
 import { StoreHydration } from '@/providers/store-hydration'
 import type { Metadata } from 'next'
@@ -12,8 +13,22 @@ const nunitoSans = Nunito_Sans({
 })
 
 export const metadata: Metadata = {
-  title: 'Diet App',
-  description: 'Acompanhe sua dieta de forma simples e eficiente.',
+  title: {
+    default: 'DietaGPT',
+    template: '%s | DietaGPT',
+  },
+  description:
+    'Receba planos alimentares completos gerados pelo ChatGPT com base nos seus dados pessoais e objetivos. Simples, rápido e totalmente adaptado ao seu perfil.',
+  openGraph: {
+    images: [
+      {
+        url: `${env.NEXT_PUBLIC_FRONTEND_URL}/assets/ui/logo.png`,
+        width: 1200,
+        height: 630,
+        alt: 'B7Store',
+      },
+    ],
+  },
 }
 
 export default async function RootLayout({
