@@ -25,7 +25,7 @@ export const metadata: Metadata = {
         url: `${env.NEXT_PUBLIC_FRONTEND_URL}/assets/ui/logo.png`,
         width: 1200,
         height: 630,
-        alt: 'B7Store',
+        alt: 'DietaGPT Logo',
       },
     ],
   },
